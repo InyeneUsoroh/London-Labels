@@ -16,28 +16,30 @@ define('DB_PASS', getenv('DB_PASS') ?: '');
 // 2) Infer from DOCUMENT_ROOT + project path (works for /LondonLabels on XAMPP)
 // 3) Fallback to '' (works for php -S in project root)
 if (!defined('BASE_URL')) {
-	$envBaseUrl = getenv('BASE_URL');
-
-	if (is_string($envBaseUrl) && $envBaseUrl !== '') {
-		$baseUrl = rtrim($envBaseUrl, '/');
-	} else {
-		$projectRoot = str_replace('\\', '/', realpath(__DIR__) ?: __DIR__);
-		$documentRootRaw = $_SERVER['DOCUMENT_ROOT'] ?? '';
-		$documentRoot = str_replace('\\', '/', realpath($documentRootRaw) ?: $documentRootRaw);
-
-		$baseUrl = '';
-		if ($documentRoot !== '' && stripos($projectRoot, $documentRoot) === 0) {
-			$relative = substr($projectRoot, strlen($documentRoot));
-			$relative = str_replace('\\', '/', $relative);
-			$relative = '/' . ltrim($relative, '/');
-			$baseUrl = rtrim($relative, '/');
-			if ($baseUrl === '/') {
-				$baseUrl = '';
-			}
-		}
-	}
-
-	define('BASE_URL', $baseUrl);
+    $envBaseUrl = getenv('BASE_URL');
+    if (is_string($envBaseUrl) && $envBaseUrl !== '') {
+        $baseUrl = rtrim($envBaseUrl, '/');
+    } else {
+        // Advanced Auto-Detection for Render/Docker/XAMPP
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        
+        // If on Render or similar cloud, use the full host
+        if (str_contains($host, 'onrender.com')) {
+            $baseUrl = $protocol . $host;
+        } else {
+            // Local XAMPP/Subdirectory logic
+            $projectRoot = str_replace('\\', '/', realpath(__DIR__) ?: __DIR__);
+            $documentRootRaw = $_SERVER['DOCUMENT_ROOT'] ?? '';
+            $documentRoot = str_replace('\\', '/', realpath($documentRootRaw) ?: $documentRootRaw);
+            $baseUrl = '';
+            if ($documentRoot !== '' && stripos($projectRoot, $documentRoot) === 0) {
+                $relative = substr($projectRoot, strlen($documentRoot));
+                $baseUrl = rtrim(str_replace('\\', '/', $relative), '/');
+            }
+        }
+    }
+    define('BASE_URL', $baseUrl);
 }
 
 // ===== MAILER CONFIGURATION (Mailtrap SMTP) =====
