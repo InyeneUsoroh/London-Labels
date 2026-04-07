@@ -1,0 +1,8 @@
+# Prevent directory browsing for security
+Options -Indexes
+
+# Restrict access to only common web media types
+<FilesMatch "\.(?i:php|phtml|php5|pl|py|jsp|asp|sh|cgi|exe)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
