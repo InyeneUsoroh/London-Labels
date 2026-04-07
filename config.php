@@ -21,7 +21,11 @@ if (!defined('BASE_URL')) {
         $baseUrl = rtrim($envBaseUrl, '/');
     } else {
         // Advanced Auto-Detection for Render/Docker/XAMPP
-        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
+        $protocol = "http://";
+        if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || 
+            (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) {
+            $protocol = "https://";
+        }
         $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
         
         // If on Render or similar cloud, use the full host
