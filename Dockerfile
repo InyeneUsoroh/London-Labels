@@ -6,17 +6,26 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
+    zip \
+    unzip \
+    git \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql gd bcmath
 
-# 3. Copy Your Boutique Code
+# 3. Install Composer (The "Library Baker")
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# 4. Copy Your Boutique Code
 COPY . /var/www/html/
 
-# 4. Permissions - Enable users to upload their own photos
+# 5. Run the "Baking" - Install dependencies inside the container
+RUN composer install --no-interaction --optimize-autoloader
+
+# 6. Permissions - Enable users to upload their own photos
 RUN mkdir -p /var/www/html/Uploads && chmod -R 777 /var/www/html/Uploads
 
-# 5. Enable Apache Mod Rewrite (For clean URLs)
+# 7. Enable Apache Mod Rewrite (For clean URLs)
 RUN a2enmod rewrite
 
-# 6. Open the Port
+# 8. Open the Port
 EXPOSE 80
