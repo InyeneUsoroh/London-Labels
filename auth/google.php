@@ -1,21 +1,15 @@
-// Placeholder for Google OAuth login
-header('Location: ' . (defined('BASE_URL') ? BASE_URL : '/index.php'));
-exit;
-
 <?php
-// Google OAuth sign-in scaffold
-// 1. Set your Google client ID, client secret, and redirect URI below
+require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../functions.php';
+require_once __DIR__ . '/../db_functions.php';
 
 $clientId = defined('GOOGLE_CLIENT_ID') ? GOOGLE_CLIENT_ID : getenv('GOOGLE_CLIENT_ID');
 $clientSecret = defined('GOOGLE_CLIENT_SECRET') ? GOOGLE_CLIENT_SECRET : getenv('GOOGLE_CLIENT_SECRET');
-$redirectUri = 'http://localhost/LondonLabels/auth/google.php';
+
+// Construct full redirect URI dynamically using BASE_URL
+$redirectUri = rtrim(BASE_URL, '/') . '/auth/google.php';
 
 if (!isset($_GET['code'])) {
-	// Debug output for OAuth values
-	echo '<pre>';
-	echo 'client_id: ' . $clientId . PHP_EOL;
-	echo 'redirect_uri: ' . $redirectUri . PHP_EOL;
-	echo '</pre>';
 	// Step 1: Redirect to Google
 	$authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
 		'client_id' => $clientId,
@@ -61,12 +55,9 @@ $userInfo = json_decode(curl_exec($ch), true);
 
 
 if (!isset($userInfo['email'])) {
-	echo 'Google sign-in failed.';
+	echo 'Google sign-in failed: Unable to fetch email.';
 	exit;
 }
-
-require_once __DIR__ . '/../functions.php';
-require_once __DIR__ . '/../db_functions.php';
 
 $pdo = get_pdo();
 $email = $userInfo['email'];
@@ -87,5 +78,5 @@ if ($user) {
 }
 
 // Redirect to dashboard or home
-header('Location: http://localhost/LondonLabels/index.php');
+header('Location: ' . rtrim(BASE_URL, '/') . '/index.php');
 exit;
