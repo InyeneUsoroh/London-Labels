@@ -65,9 +65,9 @@ include __DIR__ . '/inc_header.php';
                     <h3 class="contact-success-title">Message Received</h3>
                     <p>Thanks for reaching out. We've received your message and will get back to you within 24–48 hours.</p>
                     <?php if ($notice === 'partial'): ?>
-                        <p class="form-notice form-notice-warning" style="margin-top:20px; font-size: 14px;">
-                            <strong>Note:</strong> We saved your message, but our email notification system is currently slow. We will still see your message in our records!
-                        </p>
+                        <div class="form-notice form-notice-warning" style="margin-top:20px;">
+                            <strong>Note:</strong> Your message was saved but our email delivery is currently unavailable. We will still see your message in our admin inbox.
+                        </div>
                     <?php endif; ?>
                     <p>In the meantime, you can also reach us on <a href="<?= e(WHATSAPP_GROUP_URL) ?>" target="_blank" rel="noopener noreferrer">WhatsApp</a> for a faster response.</p>
                 </div>

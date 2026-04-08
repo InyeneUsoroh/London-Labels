@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once __DIR__ . '/../functions.php';
 $page_title = 'Delivery and Returns Policy';
 include __DIR__ . '/../inc_header.php';
