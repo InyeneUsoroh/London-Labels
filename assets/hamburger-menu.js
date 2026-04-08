@@ -139,7 +139,9 @@ class MobileNav {
                     this.categoriesSub.insertBefore(a, viewAll);
                 });
             }
-        } catch (e) {}
+        } catch (e) {
+            console.warn('MobileNav: failed to load categories', e);
+        }
         this.categoriesLoaded = true;
     }
 }
@@ -166,7 +168,10 @@ class HamburgerMenu {
         this.toggle.addEventListener('click', this.handleToggle.bind(this));
         document.addEventListener('click', this.handleOutsideClick.bind(this));
         document.addEventListener('keydown', this.handleKeydown.bind(this));
-        this.toggle.addEventListener('click', this.loadCategories.bind(this), { once: true });
+        // On mobile, load categories on first click (desktop loads on first hover above)
+        if (window.innerWidth <= 768) {
+            this.toggle.addEventListener('click', this.loadCategories.bind(this), { once: true });
+        }
     }
 
     handleMouseEnter() {
@@ -249,7 +254,9 @@ class HamburgerMenu {
                 const categories = await response.json();
                 if (categories.length > 0) this.renderCategories(categories);
             }
-        } catch (error) {}
+        } catch (error) {
+            console.warn('HamburgerMenu: failed to load categories', error);
+        }
         this.categoriesLoaded = true;
     }
 

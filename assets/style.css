@@ -805,7 +805,7 @@ input:focus-visible:not(.nav-search-form input):not(.mob-search-bar input) {
     to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.dropdown:hover .dropdown-menu,
+/* JS controller (ProfileDropdown) owns open/close — no CSS hover fallback */
 .dropdown.open .dropdown-menu {
     display: block;
 }
@@ -899,16 +899,16 @@ input:focus-visible:not(.nav-search-form input):not(.mob-search-bar input) {
 }
 
 .dropdown-admin-link {
-    color: var(--primary-color) !important;
-    font-weight: 600 !important;
+    color: var(--primary-color);
+    font-weight: 600;
 }
 
 .dropdown-admin-link:hover,
 .dropdown-admin-link:focus {
-    color: var(--primary-dark) !important;
-    border-left-color: var(--primary-dark) !important;
-    background: transparent !important;
-    outline: none !important;
+    color: var(--primary-dark);
+    border-left-color: var(--primary-dark);
+    background: transparent;
+    outline: none;
 }
 
 /* ===== SIGN OUT BUTTON inside dropdown ===== */
@@ -946,6 +946,16 @@ input:focus-visible:not(.nav-search-form input):not(.mob-search-bar input) {
 .dropdown-logout-btn:focus-visible {
     outline: 2px solid #dc2626;
     outline-offset: -2px;
+}
+
+/* Mobile drawer sign-out button reset */
+.mob-drawer-signout.mob-drawer-link {
+    background: transparent;
+    border: none;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    width: 100%;
+    text-align: left;
 }
 
 /* ===== NAV LEGACY BADGE (older markup) ===== */

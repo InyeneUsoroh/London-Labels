@@ -218,11 +218,6 @@ $upload_script_version = is_file($upload_script_path) ? (string)filemtime($uploa
                 </button>
             </div>
 
-            <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
             <ul class="navbar-menu" id="primaryNav">
                 <li class="hamburger-menu-item">
                     <button type="button" class="hamburger-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="categoriesMenu" aria-label="Open categories menu">
@@ -352,7 +347,7 @@ $upload_script_version = is_file($upload_script_path) ? (string)filemtime($uploa
                 <div class="mob-drawer-divider"></div>
                 <form method="post" action="<?= BASE_URL ?>/logout.php" style="margin: 0; padding: 0;">
                     <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
-                    <button type="submit" class="mob-drawer-link mob-drawer-signout" style="background: transparent; border: none; padding-top: 13px; padding-bottom: 13px;">Sign Out</button>
+                    <button type="submit" class="mob-drawer-link mob-drawer-signout">Sign Out</button>
                 </form>
             <?php else: ?>
                 <!-- Guest section -->
