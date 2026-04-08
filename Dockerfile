@@ -24,8 +24,10 @@ RUN composer install --no-interaction --optimize-autoloader
 # 6. Permissions - Enable users to upload their own photos
 RUN mkdir -p /var/www/html/Uploads && chmod -R 777 /var/www/html/Uploads
 
-# 7. Enable Apache Mod Rewrite (For clean URLs)
-RUN a2enmod rewrite
+# 7. Enable Apache Mod Rewrite and Fix MPMs
+RUN a2dismod mpm_event mpm_worker || true \
+    && a2enmod mpm_prefork \
+    && a2enmod rewrite
 
 # 8. Open the Port
 EXPOSE 80
