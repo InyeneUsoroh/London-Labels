@@ -316,6 +316,94 @@ function send_account_deleted_email(string $toEmail, string $toName, ?string &$e
     }
 }
 
+/**
+ * Send new order notification to admin.
+ * Fires after a successful payment — non-fatal if it fails.
+ */
+function send_new_order_admin_notification(int $orderId, string $customerName, string $customerEmail, array $orderItems, float $total, string $shippingAddress, string $phone): bool {
+    $siteName   = SITE_NAME;
+    $adminEmail = CONTACT_EMAIL;
+
+    $itemsHtml = '';
+    foreach ($orderItems as $item) {
+        $itemName     = htmlspecialchars($item['name'],                       ENT_QUOTES, 'UTF-8');
+        $itemQty      = (int)$item['quantity'];
+        $itemSize     = !empty($item['size_label']) ? ' (' . htmlspecialchars((string)$item['size_label'], ENT_QUOTES, 'UTF-8') . ')' : '';
+        $itemSubtotal = number_format((float)$item['subtotal'], 2);
+        $itemsHtml .= "
+            <tr>
+                <td style='padding:10px 0;border-bottom:1px solid #e5e7eb;font-size:14px;color:#374151;'>{$itemName}{$itemSize}</td>
+                <td style='padding:10px 0;border-bottom:1px solid #e5e7eb;font-size:14px;color:#6b7280;text-align:center;'>{$itemQty}</td>
+                <td style='padding:10px 0;border-bottom:1px solid #e5e7eb;font-size:14px;color:#1a1a1a;font-weight:500;text-align:right;'>&#8358;{$itemSubtotal}</td>
+            </tr>";
+    }
+
+    $safeCustomer = htmlspecialchars($customerName,    ENT_QUOTES, 'UTF-8');
+    $safeEmail    = htmlspecialchars($customerEmail,   ENT_QUOTES, 'UTF-8');
+    $safeAddress  = htmlspecialchars($shippingAddress, ENT_QUOTES, 'UTF-8');
+    $safePhone    = htmlspecialchars($phone,           ENT_QUOTES, 'UTF-8');
+    $safeTotal    = number_format($total, 2);
+    $adminUrl     = (defined('BASE_URL') ? BASE_URL : '') . '/admin/orders.php';
+
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host       = MAIL_HOST;
+        $mail->SMTPAuth   = true;
+        $mail->Username   = MAIL_USERNAME;
+        $mail->Password   = MAIL_PASSWORD;
+        $mail->SMTPSecure = MAIL_ENCRYPTION;
+        $mail->Port       = MAIL_PORT;
+        $mail->Timeout    = 10;
+
+        $mail->setFrom(MAIL_FROM, MAIL_FROM_NAME);
+        $mail->addAddress($adminEmail, $siteName . ' Admin');
+
+        $mail->isHTML(true);
+        $mail->Subject = "[New Order #{$orderId}] {$customerName} — ₦{$safeTotal}";
+        $mail->Body = _ll_email_wrap($siteName . ' — New Order', "
+            <p style='margin:0 0 4px;font-size:12px;color:#e8357e;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;'>New order received</p>
+            <h2 style='margin:0 0 24px;font-size:20px;color:#1a1a1a;font-weight:600;'>Order #{$orderId}</h2>
+
+            <div style='background:#fff5fa;border-radius:8px;border-left:3px solid #e8357e;padding:20px 24px;margin-bottom:24px;'>
+                <p style='margin:0 0 4px;font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;'>Customer</p>
+                <p style='margin:0;font-size:16px;color:#1a1a1a;font-weight:600;'>{$safeCustomer}</p>
+                <p style='margin:4px 0 2px;font-size:14px;'><a href='mailto:{$safeEmail}' style='color:#e8357e;text-decoration:none;'>{$safeEmail}</a></p>
+                <p style='margin:2px 0 2px;font-size:13px;color:#6b7280;'>{$safePhone}</p>
+                <p style='margin:2px 0 0;font-size:13px;color:#6b7280;'>{$safeAddress}</p>
+            </div>
+
+            <table width='100%' cellpadding='0' cellspacing='0' style='margin-bottom:8px;'>
+                <thead>
+                    <tr>
+                        <th style='padding:0 0 8px;font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;text-align:left;font-weight:500;'>Item</th>
+                        <th style='padding:0 0 8px;font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;text-align:center;font-weight:500;'>Qty</th>
+                        <th style='padding:0 0 8px;font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;text-align:right;font-weight:500;'>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>{$itemsHtml}</tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan='2' style='padding:12px 0 0;font-size:15px;font-weight:600;color:#1a1a1a;'>Total</td>
+                        <td style='padding:12px 0 0;font-size:15px;font-weight:700;color:#e8357e;text-align:right;'>&#8358;{$safeTotal}</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div style='margin-top:28px;'>
+                <a href='{$adminUrl}' style='display:inline-block;padding:12px 28px;background:#1a1a1a;color:#ffffff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600;'>View in Admin Panel</a>
+            </div>
+        ");
+        $mail->AltBody = "New order #{$orderId} from {$customerName} ({$customerEmail})\nTotal: ₦{$safeTotal}\nPhone: {$phone}\nAddress: {$shippingAddress}\n\nView: {$adminUrl}";
+
+        $mail->send();
+        return true;
+    } catch (Exception $ex) {
+        error_log('Admin order notification failed: ' . ($mail->ErrorInfo ?: $ex->getMessage()));
+        return false;
+    }
+}
+
 function send_order_status_update_email(string $toEmail, string $toName, int $orderId, string $status, string $paymentStatus, ?string &$error = null): bool {
     $mail = new PHPMailer(true);
     $siteName    = SITE_NAME;

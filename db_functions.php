@@ -1885,4 +1885,39 @@ function save_contact_message(string $name, string $email, string $subject, stri
     return (int)get_pdo()->lastInsertId();
 }
 
+function get_contact_messages(int $limit = 50, int $offset = 0, string $status = ''): array {
+    ensure_contact_messages_table();
+    $pdo = get_pdo();
+    // Add read/archived status column if not present
+    try {
+        $pdo->exec("ALTER TABLE contact_messages ADD COLUMN status ENUM('unread','read','archived') NOT NULL DEFAULT 'unread'");
+        $pdo->exec("ALTER TABLE contact_messages ADD INDEX idx_contact_status (status)");
+    } catch (PDOException $e) { /* column already exists */ }
+
+    $where = $status !== '' ? 'WHERE status = ' . $pdo->quote($status) : '';
+    $stmt = $pdo->prepare("SELECT * FROM contact_messages {$where} ORDER BY created_at DESC LIMIT ? OFFSET ?");
+    $stmt->bindValue(1, $limit,  PDO::PARAM_INT);
+    $stmt->bindValue(2, $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+function count_contact_messages(string $status = ''): int {
+    ensure_contact_messages_table();
+    $pdo = get_pdo();
+    $where = $status !== '' ? 'WHERE status = ' . $pdo->quote($status) : '';
+    return (int)$pdo->query("SELECT COUNT(*) FROM contact_messages {$where}")->fetchColumn();
+}
+
+function set_contact_message_status(int $id, string $status): void {
+    ensure_contact_messages_table();
+    get_pdo()->prepare("UPDATE contact_messages SET status = ? WHERE id = ?")
+        ->execute([$status, $id]);
+}
+
+function delete_contact_message(int $id): void {
+    ensure_contact_messages_table();
+    get_pdo()->prepare("DELETE FROM contact_messages WHERE id = ?")->execute([$id]);
+}
+
 

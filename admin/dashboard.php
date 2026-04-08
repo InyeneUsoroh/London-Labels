@@ -262,6 +262,12 @@ include __DIR__ . '/inc_admin_layout.php';
             <a href="<?= BASE_URL ?>/admin/orders.php?status=pending" class="btn">View Pending Orders</a>
             <a href="<?= BASE_URL ?>/admin/categories.php" class="btn">Manage Categories</a>
             <a href="<?= BASE_URL ?>/admin/users.php" class="btn">View Customers</a>
+            <?php
+                $dash_unread = count_contact_messages('unread');
+            ?>
+            <a href="<?= BASE_URL ?>/admin/messages.php?status=unread" class="btn" style="position:relative;">
+                Messages<?php if ($dash_unread > 0): ?> <span style="display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;background:#e8357e;color:#fff;font-size:10px;font-weight:700;border-radius:999px;margin-left:4px;"><?= $dash_unread ?></span><?php endif; ?>
+            </a>
         </div>
     </div>
 

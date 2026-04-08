@@ -2647,3 +2647,237 @@
     margin: 0;
     line-height: 1.5;
 }
+
+/* ===== ADMIN NAV BADGE ===== */
+.admin-nav-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    margin-left: auto;
+    background: #e8357e;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 999px;
+    line-height: 1;
+}
+
+/* ===== ADMIN TAB BAR ===== */
+.admin-tab-bar {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--admin-border, #e5e7eb);
+    flex-wrap: wrap;
+}
+
+.admin-tab-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--admin-text-secondary, #6b7280);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+}
+
+.admin-tab-link:hover {
+    color: var(--admin-text, #1a1a1a);
+}
+
+.admin-tab-link.active {
+    color: #e8357e;
+    border-bottom-color: #e8357e;
+    font-weight: 600;
+}
+
+.admin-tab-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 18px;
+    padding: 0 5px;
+    background: #f3f4f6;
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 999px;
+}
+
+.admin-tab-count-alert {
+    background: #fce7f3;
+    color: #e8357e;
+}
+
+/* ===== ADMIN MESSAGES INBOX ===== */
+.admin-messages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.admin-message-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px 24px;
+    transition: box-shadow 0.15s;
+}
+
+.admin-message-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.admin-message-unread {
+    border-left: 3px solid #e8357e;
+}
+
+.admin-message-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+}
+
+.admin-message-sender {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-message-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.admin-message-date {
+    font-size: 12px;
+    color: #9ca3af;
+    white-space: nowrap;
+}
+
+.admin-message-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #fce7f3;
+    color: #e8357e;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-radius: 999px;
+}
+
+.admin-message-badge-muted {
+    background: #f3f4f6;
+    color: #9ca3af;
+}
+
+.admin-message-contact {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.admin-message-email {
+    font-size: 13px;
+    color: #e8357e;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.admin-message-email:hover {
+    text-decoration: underline;
+}
+
+.admin-message-subject-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    background: #f3f4f6;
+    color: #374151;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 999px;
+}
+
+.admin-message-body {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.65;
+    margin: 0 0 16px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.admin-message-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.admin-mini-btn-danger {
+    color: #dc2626 !important;
+    border-color: #fca5a5 !important;
+}
+
+.admin-mini-btn-danger:hover {
+    background: #fee2e2 !important;
+    border-color: #dc2626 !important;
+}
+
+/* ===== ADMIN PAGINATION ===== */
+.admin-pagination {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+.admin-page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.15s;
+}
+
+.admin-page-btn:hover {
+    border-color: #9ca3af;
+    background: #f9fafb;
+}
+
+.admin-page-btn.active {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+    color: #fff;
+}
+
+.admin-pagination-summary {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #9ca3af;
+}

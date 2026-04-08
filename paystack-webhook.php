@@ -135,6 +135,7 @@ try {
     // Send confirmation email
     try {
         send_order_confirmation_email($email, $fullname, $order_id, [], $amount);
+        send_new_order_admin_notification($order_id, $fullname, $email, [], $amount, '', '');
     } catch (Exception $e) {
         error_log('Webhook order email failed: ' . $e->getMessage());
     }

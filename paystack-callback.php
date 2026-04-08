@@ -117,7 +117,7 @@ try {
     $_SESSION['cart_variant_ids'] = [];
     unset($_SESSION['pending_order']);
 
-    // Send confirmation email (non-fatal if it fails)
+    // Send confirmation email to customer (non-fatal)
     try {
         $order = get_order_by_id($order_id);
         send_order_confirmation_email(
@@ -129,6 +129,21 @@ try {
         );
     } catch (Exception $e) {
         error_log('Order confirmation email failed: ' . $e->getMessage());
+    }
+
+    // Send new order notification to admin (non-fatal)
+    try {
+        send_new_order_admin_notification(
+            $order_id,
+            $pending['fullname'],
+            $pending['email'],
+            $pending['items'],
+            $pending['subtotal'],
+            trim(($pending['address'] ?? '') . (($pending['address_line2'] ?? '') !== '' ? ', ' . $pending['address_line2'] : '') . ', ' . ($pending['city'] ?? '') . ', ' . ($pending['state'] ?? '')),
+            $pending['phone']
+        );
+    } catch (Exception $e) {
+        error_log('Admin order notification failed: ' . $e->getMessage());
     }
 
     header('Location: ' . BASE_URL . '/order-confirmation.php?order_id=' . $order_id);

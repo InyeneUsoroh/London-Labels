@@ -84,8 +84,14 @@ $_meta_title = isset($page_title) ? htmlspecialchars($page_title, ENT_QUOTES) . 
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
                 Users
             </a>
-
-            <div class="admin-nav-divider"></div>
+            <?php $_nav_unread = count_contact_messages('unread'); ?>
+            <a href="<?= BASE_URL ?>/admin/messages.php" class="admin-nav-link <?= _admin_active('messages.php') ?>">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                Messages
+                <?php if ($_nav_unread > 0): ?>
+                    <span class="admin-nav-badge"><?= $_nav_unread ?></span>
+                <?php endif; ?>
+            </a>
 
             <a href="<?= BASE_URL ?>/index.php" class="admin-nav-link admin-nav-link-muted" target="_blank" rel="noopener">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>

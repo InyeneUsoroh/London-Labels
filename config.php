@@ -52,7 +52,7 @@ define('MAIL_PASSWORD', getenv('MAIL_PASSWORD') ?: '');
 // Auto-switch encryption: 465 usually means 'ssl', 587 usually means 'tls'
 $defaultEnc = (MAIL_PORT === 465) ? 'ssl' : 'tls';
 define('MAIL_ENCRYPTION', getenv('MAIL_ENCRYPTION') ?: $defaultEnc);
-define('MAIL_FROM', 'noreply@londonlabels.com');
+define('MAIL_FROM', getenv('MAIL_FROM') ?: 'noreply@londonlabels.com');
 define('MAIL_FROM_NAME', 'London Labels');
 
 // ===== SITE CONFIGURATION =====
