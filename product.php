@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * London Labels - Product Details Page
  */
@@ -679,12 +679,8 @@ if (!empty($product)): ?>
                         aria-label="<?= $is_saved ? 'Remove from wishlist' : 'Add to wishlist' ?>"
                         aria-pressed="<?= $is_saved ? 'true' : 'false' ?>"
                     >
-                        <svg class="product-wishlist-icon-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <?php if ($is_saved): ?>
-                                <path fill="currentColor" d="M20.8 4.6a5.5 5.5 0 00-7.7 0l-1.1 1-1.1-1a5.5 5.5 0 00-7.8 7.8l1.1 1 7.8 7.8 7.8-7.7 1-1.1a5.5 5.5 0 000-7.8z"></path>
-                            <?php else: ?>
-                                <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M20.8 4.6a5.5 5.5 0 00-7.7 0l-1.1 1-1.1-1a5.5 5.5 0 00-7.8 7.8l1.1 1 7.8 7.8 7.8-7.7 1-1.1a5.5 5.5 0 000-7.8z"></path>
-                            <?php endif; ?>
+                        <svg class="product-wishlist-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                            <path d="M20.8 4.6a5.5 5.5 0 00-7.7 0l-1.1 1-1.1-1a5.5 5.5 0 00-7.8 7.8l1.1 1 7.8 7.8 7.8-7.7 1-1.1a5.5 5.5 0 000-7.8z" <?= $is_saved ? 'fill="currentColor"' : '' ?>></path>
                         </svg>
                     </button>
 
@@ -714,12 +710,8 @@ if (!empty($product)): ?>
                     data-wishlist-icon="1"
                     aria-label="Wishlist"
                 >
-                    <svg class="product-wishlist-icon-svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                        <?php if ($is_saved): ?>
-                            <path fill="currentColor" d="M20.8 4.6a5.5 5.5 0 00-7.7 0l-1.1 1-1.1-1a5.5 5.5 0 00-7.8 7.8l1.1 1 7.8 7.8 7.8-7.7 1-1.1a5.5 5.5 0 000-7.8z"></path>
-                        <?php else: ?>
-                            <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M20.8 4.6a5.5 5.5 0 00-7.7 0l-1.1 1-1.1-1a5.5 5.5 0 00-7.8 7.8l1.1 1 7.8 7.8 7.8-7.7 1-1.1a5.5 5.5 0 000-7.8z"></path>
-                        <?php endif; ?>
+                    <svg class="product-wishlist-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="M20.8 4.6a5.5 5.5 0 00-7.7 0l-1.1 1-1.1-1a5.5 5.5 0 00-7.8 7.8l1.1 1 7.8 7.8 7.8-7.7 1-1.1a5.5 5.5 0 000-7.8z" <?= $is_saved ? 'fill="currentColor"' : '' ?>></path>
                     </svg>
                 </button>
 

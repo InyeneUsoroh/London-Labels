@@ -3254,63 +3254,7 @@ input:focus-visible:not(.nav-search-form input):not(.mob-search-bar input) {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* PDP Actions & Balancing */
-.product-purchase-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 24px;
-}
-
-.product-detail-cta {
-    width: 100%;
-    height: 52px;
-    font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.product-secondary-actions {
-    display: flex;
-    gap: 8px;
-    width: 100%;
-}
-
-.product-action-secondary-btn {
-    flex: 1;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff;
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    transition: all 0.25s ease;
-    border-radius: 2px;
-    padding: 0;
-}
-
-.product-action-secondary-btn:hover {
-    border-color: var(--text-primary);
-    background: #f8fafc;
-}
-
-.product-action-secondary-btn svg {
-    width: 20px;
-    height: 20px;
-}
-
-.product-action-secondary-btn.saved {
-    color: var(--magenta);
-    border-color: var(--magenta);
-}
-
-/* PDP Logic & Balancing */
+/* PDP Actions & Balancing — authoritative definition further below */
 .product-status-row {
     margin-bottom: 0 !important; /* Critical sync point */
 }
@@ -10167,86 +10111,54 @@ body.review-lightbox-open {
     opacity: 0.7 !important;
 }
 
-.product-secondary-actions {
+/* ===== PDP ACTION BUTTONS — AUTHORITATIVE ===== */
+.product-purchase-actions {
     display: flex;
+    flex-direction: column;
     gap: 10px;
-    width: 100%;
-    margin-top: 8px;
+    margin-top: 20px;
 }
 
+.product-secondary-actions {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+/* Each secondary btn (wishlist + share) takes equal share */
 .product-action-secondary-btn {
     flex: 1;
-    height: 40px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #fff;
     border: 1px solid var(--border-color);
     color: var(--text-primary);
-    transition: all 0.25s ease;
     border-radius: 2px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    padding: 0;
 }
 
-@media (max-width: 768px) {
-    .product-detail-cta {
-        height: 48px !important;
-        min-height: 48px !important;
-    }
-    .product-action-secondary-btn {
-        height: 48px;
-    }
+.product-action-secondary-btn:hover {
+    border-color: var(--text-primary);
+    background: #f9f9f9;
 }
 
-/* PDP Action Container (Radical Compression) */
-.product-purchase-actions {
-    margin-top: 4px !important; 
-    padding-top: 2px !important; 
-    padding-bottom: 2px !important; 
-    border-bottom: 1px solid var(--border-color); 
-    display: flex;
-    flex-direction: column;
-    gap: 4px !important;
+.product-action-secondary-btn.saved {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
-.product-detail-cta {
-    height: 32px !important; 
-    min-height: 32px !important;
-    font-size: 11px !important;
-    padding: 0 16px !important;
-    letter-spacing: 0.08em;
-    border-radius: 2px !important;
-}
-
-.product-action-secondary-btn {
-    height: 32px !important; 
-    width: 38px !important;
-    min-width: 38px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 2px !important;
-    background: #fff !important;
-    color: var(--text-primary) !important;
-}
-
-.product-secondary-actions {
-    display: flex !important;
-    gap: 6px !important;
-    justify-content: flex-start !important;
-    align-items: center !important;
-}
-
-.product-wishlist-icon-svg {
-    width: 17px !important;
-    height: 17px !important;
-}
-
+/* Consistent icon sizing across both buttons */
+.product-wishlist-icon-svg,
 .product-share-trigger-icon {
-    width: 17px !important;
-    height: 17px !important;
-    stroke-width: 2px !important;
+    width: 20px;
+    height: 20px;
+    display: block;
+    stroke-width: 1.8px;
+    flex-shrink: 0;
 }
 
 .product-size-wrap {
@@ -10351,46 +10263,11 @@ body.review-lightbox-open {
     font-weight: 500;
 }
 
-.product-secondary-actions .product-wishlist-icon,
-.product-secondary-actions .product-share-trigger {
-    width: 54px;
-    height: 54px;
-    min-width: 54px;
-    padding: 0;
-    border: 1px solid var(--border-color);
-    background: transparent;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    cursor: pointer;
-}
-
-.product-secondary-actions .product-wishlist-icon:hover,
-.product-secondary-actions .product-share-trigger:hover {
-    border-color: var(--text-primary);
-    background: #f9f9f9;
-}
-
-.product-secondary-actions .product-wishlist-icon.saved {
-    background: transparent !important;
-    color: var(--primary-color) !important;
-    border-color: var(--primary-color) !important;
-}
+/* product-secondary-actions sizing handled by .product-action-secondary-btn above */
 
 @media (max-width: 768px) {
     .product-buy-actions {
         gap: 10px;
-    }
-    .product-detail-cta {
-        font-size: 14px; /* Slightly smaller for mobile fit */
-    }
-    .product-secondary-actions .product-wishlist-icon,
-    .product-secondary-actions .product-share-trigger {
-        width: 48px;
-        height: 48px;
-        min-width: 48px;
     }
 }
 
