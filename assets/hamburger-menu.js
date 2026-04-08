@@ -494,46 +494,45 @@ function initQuickShare() {
             url: btn.dataset.shareUrl || window.location.href
         };
 
-        let shared = false;
+        // Native share sheet (iOS/Android) — requires HTTPS
         if (navigator.share) {
             try {
                 await navigator.share(shareData);
-                shared = true;
             } catch (err) {
-                // Fail-through to clipboard
+                // AbortError = user dismissed the share sheet intentionally — do nothing
+                if (err && err.name === 'AbortError') return;
+                // Any other error (e.g. DataError) — fall through to clipboard
             }
+            return; // native share was attempted — don't also copy to clipboard
         }
 
-        if (!shared) {
-            const url = shareData.url;
+        // Clipboard fallback for desktop / non-HTTPS
+        const url = shareData.url;
+        try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(url);
+                showToast('Link copied to clipboard!');
+            } else {
+                throw new Error('Clipboard API unavailable');
+            }
+        } catch (err) {
+            // Legacy textarea fallback
             try {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    await navigator.clipboard.writeText(url);
+                const textArea = document.createElement("textarea");
+                textArea.value = url;
+                textArea.style.cssText = "position:fixed;left:-9999px;top:0;opacity:0;";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                const ok = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                if (ok) {
                     showToast('Link copied to clipboard!');
                 } else {
-                    throw new Error('Clipboard API unavailable');
-                }
-            } catch (err) {
-                // Legacy fallback: hidden textarea
-                try {
-                    const textArea = document.createElement("textarea");
-                    textArea.value = url;
-                    textArea.style.position = "fixed";
-                    textArea.style.left = "-9999px";
-                    textArea.style.top = "0";
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-                    const successful = document.execCommand('copy');
-                    document.body.removeChild(textArea);
-                    if (successful) {
-                        showToast('Link copied to clipboard!');
-                    } else {
-                        throw new Error('execCommand copy failed');
-                    }
-                } catch (fallbackErr) {
                     showToast('Could not copy link', 'error');
                 }
+            } catch (fallbackErr) {
+                showToast('Could not copy link', 'error');
             }
         }
     });
