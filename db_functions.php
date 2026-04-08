@@ -1348,7 +1348,8 @@ function get_recent_orders(int $limit = 5): array {
 function ensure_contact_messages_table(): void {
     static $ensured = false;
     if ($ensured) return;
-    get_pdo()->exec('
+    $pdo = get_pdo();
+    $pdo->exec('
         CREATE TABLE IF NOT EXISTS contact_messages (
             id          INT AUTO_INCREMENT PRIMARY KEY,
             name        VARCHAR(120)  NOT NULL,
@@ -1361,6 +1362,13 @@ function ensure_contact_messages_table(): void {
             INDEX idx_contact_created (created_at)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     ');
+    // Add status column if not present (migration for existing tables)
+    try {
+        $pdo->exec("ALTER TABLE contact_messages ADD COLUMN status ENUM('unread','read','archived') NOT NULL DEFAULT 'unread'");
+    } catch (PDOException $e) { /* column already exists — safe to ignore */ }
+    try {
+        $pdo->exec("ALTER TABLE contact_messages ADD INDEX idx_contact_status (status)");
+    } catch (PDOException $e) { /* index already exists — safe to ignore */ }
     $ensured = true;
 }
 
@@ -1888,12 +1896,6 @@ function save_contact_message(string $name, string $email, string $subject, stri
 function get_contact_messages(int $limit = 50, int $offset = 0, string $status = ''): array {
     ensure_contact_messages_table();
     $pdo = get_pdo();
-    // Add read/archived status column if not present
-    try {
-        $pdo->exec("ALTER TABLE contact_messages ADD COLUMN status ENUM('unread','read','archived') NOT NULL DEFAULT 'unread'");
-        $pdo->exec("ALTER TABLE contact_messages ADD INDEX idx_contact_status (status)");
-    } catch (PDOException $e) { /* column already exists */ }
-
     $where = $status !== '' ? 'WHERE status = ' . $pdo->quote($status) : '';
     $stmt = $pdo->prepare("SELECT * FROM contact_messages {$where} ORDER BY created_at DESC LIMIT ? OFFSET ?");
     $stmt->bindValue(1, $limit,  PDO::PARAM_INT);
