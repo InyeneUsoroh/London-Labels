@@ -245,15 +245,21 @@ function update_user_last_login(int $user_id): void {
 function ensure_category_extras(): void {
     static $ensured = false;
     if ($ensured) return;
-    $pdo = get_pdo();
-    $schema = (string)$pdo->query('SELECT DATABASE()')->fetchColumn();
-    if ($schema !== '') {
-        $stmt = $pdo->prepare("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'Categories'");
-        $stmt->execute([$schema]);
-        $cols = array_flip(array_column($stmt->fetchAll(), 'COLUMN_NAME'));
-        if (!isset($cols['cover_image'])) {
-            $pdo->exec("ALTER TABLE Categories ADD COLUMN cover_image VARCHAR(255) NULL");
+    try {
+        $pdo = get_pdo();
+        $schema = (string)$pdo->query('SELECT DATABASE()')->fetchColumn();
+        if ($schema !== '') {
+            $stmt = $pdo->prepare("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'Categories'");
+            $stmt->execute([$schema]);
+            $cols = array_flip(array_column($stmt->fetchAll(), 'COLUMN_NAME'));
+            if (!isset($cols['cover_image'])) {
+                $pdo->exec("ALTER TABLE Categories ADD COLUMN cover_image VARCHAR(255) NULL");
+            }
         }
+    } catch (\Throwable $e) {
+        // ALTER TABLE may fail on restricted DB users (e.g. Railway). Safe to continue —
+        // get_all_categories() will still work; cover_image simply won't be available.
+        error_log('ensure_category_extras: ' . $e->getMessage());
     }
     $ensured = true;
 }

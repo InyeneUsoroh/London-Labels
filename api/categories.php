@@ -16,31 +16,23 @@ header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Content-Type');
 
 try {
-    // Get categories from database
     $categories = get_all_categories();
-    
-    // Format categories for frontend consumption
+
     $formatted_categories = array_map(function($category) {
         return [
-            'id' => (int)$category['category_id'],
-            'name' => $category['name'],
-            'slug' => strtolower(str_replace([' ', '&', "'", '/'], ['-', 'and', '', '-'], $category['name'])),
+            'id'          => (int)$category['category_id'],
+            'name'        => $category['name'],
+            'slug'        => strtolower(str_replace([' ', '&', "'", '/'], ['-', 'and', '', '-'], $category['name'])),
             'description' => $category['description'] ?? ''
         ];
     }, $categories);
-    
-    // Return the actual categories from database
+
     echo json_encode($formatted_categories);
-    
-} catch (Exception $e) {
-    // Log error for debugging
+
+} catch (\Throwable $e) {
     error_log('Categories API Error: ' . $e->getMessage());
-    
-    // Return error response
-    http_response_code(500);
-    echo json_encode([
-        'error' => 'Failed to load categories',
-        'message' => 'Please try again later'
-    ]);
+    // Return empty array — the dropdown still renders with just "View All Products"
+    // rather than a 500 that the JS catch silently swallows, leaving the panel blank.
+    echo json_encode([]);
 }
 ?>
