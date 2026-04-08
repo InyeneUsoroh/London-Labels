@@ -6,8 +6,8 @@ exit;
 // Google OAuth sign-in scaffold
 // 1. Set your Google client ID, client secret, and redirect URI below
 
-$clientId = defined('GOOGLE_CLIENT_ID') ? GOOGLE_CLIENT_ID : '362858628545-vs7vp07q7qmkh2o894nj6995bueea7er.apps.googleusercontent.com';
-$clientSecret = defined('GOOGLE_CLIENT_SECRET') ? GOOGLE_CLIENT_SECRET : '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';
+$clientId = defined('GOOGLE_CLIENT_ID') ? GOOGLE_CLIENT_ID : getenv('GOOGLE_CLIENT_ID');
+$clientSecret = defined('GOOGLE_CLIENT_SECRET') ? GOOGLE_CLIENT_SECRET : getenv('GOOGLE_CLIENT_SECRET');
 $redirectUri = 'http://localhost/LondonLabels/auth/google.php';
 
 if (!isset($_GET['code'])) {
@@ -45,7 +45,6 @@ curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postFields));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
-curl_close($ch);
 $tokenData = json_decode($response, true);
 
 if (!isset($tokenData['access_token'])) {
@@ -59,7 +58,7 @@ $ch = curl_init($userInfoUrl);
 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $tokenData['access_token']]);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $userInfo = json_decode(curl_exec($ch), true);
-curl_close($ch);
+
 
 if (!isset($userInfo['email'])) {
 	echo 'Google sign-in failed.';

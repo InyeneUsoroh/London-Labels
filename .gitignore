@@ -1,26 +1,10 @@
-# Dependencies
+/data.db
+/.env
 /vendor/
-/.kiro/
-/.venv/
-/.git/
-
-# User Uploads (Keep the directory, ignore the files)
-/Uploads/*
-!/Uploads/.htaccess
-!/Uploads/index.php
-
-# Environment Secrets
-config.local.php
-.env
-.phpstorm.meta.php/
-_ide_helper.php
-.DS_Store
-Thumbs.db
-error_log
-php_error.log
-*.sql
-*.zip
-*.log
-*.sqlite
-data.db
-node_modules/
+/.DS_Store
+/Uploads/Products/*
+!/Uploads/Products/.htaccess
+!/Uploads/Products/index.php
+/Uploads/categories/*
+!/Uploads/categories/.htaccess
+!/Uploads/categories/index.php

@@ -16,42 +16,36 @@ define('DB_PASS', getenv('DB_PASS') ?: '');
 // 2) Infer from DOCUMENT_ROOT + project path (works for /LondonLabels on XAMPP)
 // 3) Fallback to '' (works for php -S in project root)
 if (!defined('BASE_URL')) {
-    $envBaseUrl = getenv('BASE_URL');
-    if (is_string($envBaseUrl) && $envBaseUrl !== '') {
-        $baseUrl = rtrim($envBaseUrl, '/');
-    } else {
-        // Advanced Auto-Detection for Render/Docker/XAMPP
-        $protocol = "http://";
-        if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || 
-            (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) {
-            $protocol = "https://";
-        }
-        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-        
-        // If on Render or similar cloud, use the full host
-        if (str_contains($host, 'onrender.com')) {
-            $baseUrl = $protocol . $host;
-        } else {
-            // Local XAMPP/Subdirectory logic
-            $projectRoot = str_replace('\\', '/', realpath(__DIR__) ?: __DIR__);
-            $documentRootRaw = $_SERVER['DOCUMENT_ROOT'] ?? '';
-            $documentRoot = str_replace('\\', '/', realpath($documentRootRaw) ?: $documentRootRaw);
-            $baseUrl = '';
-            if ($documentRoot !== '' && stripos($projectRoot, $documentRoot) === 0) {
-                $relative = substr($projectRoot, strlen($documentRoot));
-                $baseUrl = rtrim(str_replace('\\', '/', $relative), '/');
-            }
-        }
-    }
-    define('BASE_URL', $baseUrl);
+	$envBaseUrl = getenv('BASE_URL');
+
+	if (is_string($envBaseUrl) && $envBaseUrl !== '') {
+		$baseUrl = rtrim($envBaseUrl, '/');
+	} else {
+		$projectRoot = str_replace('\\', '/', realpath(__DIR__) ?: __DIR__);
+		$documentRootRaw = $_SERVER['DOCUMENT_ROOT'] ?? '';
+		$documentRoot = str_replace('\\', '/', realpath($documentRootRaw) ?: $documentRootRaw);
+
+		$baseUrl = '';
+		if ($documentRoot !== '' && stripos($projectRoot, $documentRoot) === 0) {
+			$relative = substr($projectRoot, strlen($documentRoot));
+			$relative = str_replace('\\', '/', $relative);
+			$relative = '/' . ltrim($relative, '/');
+			$baseUrl = rtrim($relative, '/');
+			if ($baseUrl === '/') {
+				$baseUrl = '';
+			}
+		}
+	}
+
+	define('BASE_URL', $baseUrl);
 }
 
 // ===== MAILER CONFIGURATION (Mailtrap SMTP) =====
-define('MAIL_HOST', 'sandbox.smtp.mailtrap.io');
-define('MAIL_PORT', 465);
-define('MAIL_USERNAME', '139d8ae03aafcf');
-define('MAIL_PASSWORD', '615e9d915016a9');
-define('MAIL_ENCRYPTION', 'tls');
+define('MAIL_HOST', getenv('MAIL_HOST') ?: 'sandbox.smtp.mailtrap.io');
+define('MAIL_PORT', getenv('MAIL_PORT') ?: 465);
+define('MAIL_USERNAME', getenv('MAIL_USERNAME') ?: '');
+define('MAIL_PASSWORD', getenv('MAIL_PASSWORD') ?: '');
+define('MAIL_ENCRYPTION', getenv('MAIL_ENCRYPTION') ?: 'tls');
 define('MAIL_FROM', 'noreply@londonlabels.com');
 define('MAIL_FROM_NAME', 'London Labels');
 
@@ -78,12 +72,8 @@ define('CONTACT_PHONE_HREF', 'tel:+2348000000000'); // Replace with your real nu
 define('CUSTOMER_CARE_HOURS', '9AM – 6PM WAT');
 
 // ===== CURRENCY =====
-if (!defined('CURRENCY_SYMBOL')) {
-    define('CURRENCY_SYMBOL', '₦');
-}
-if (!defined('CURRENCY_CODE')) {
-    define('CURRENCY_CODE', 'NGN');
-}
+define('CURRENCY_SYMBOL', '₦');
+define('CURRENCY_CODE', 'NGN');
 define('UPLOAD_DIR', __DIR__ . '/Uploads/');
 define('MAX_FILE_SIZE', 5 * 1024 * 1024); // 5MB
 define('ALLOWED_EXTENSIONS', ['jpg', 'jpeg', 'png', 'gif']);
@@ -102,11 +92,10 @@ define('ITEMS_PER_PAGE', 12);
 
 // ===== PAYSTACK =====
 // Get your keys from https://dashboard.paystack.com/#/settings/developer
-define('PAYSTACK_SECRET_KEY', getenv('PAYSTACK_SECRET_KEY') ?: 'sk_test_1245b0d8adb1979923e15b039ec91afc870a2100');
-define('PAYSTACK_PUBLIC_KEY', getenv('PAYSTACK_PUBLIC_KEY') ?: 'pk_test_f1cb88d939a2ceee71e9d024ed1ee792dd7439a2');
+define('PAYSTACK_SECRET_KEY', getenv('PAYSTACK_SECRET_KEY') ?: '');
+define('PAYSTACK_PUBLIC_KEY', getenv('PAYSTACK_PUBLIC_KEY') ?: '');
 
 // ===== OAUTH CREDENTIALS =====
 // Add your credentials below. Keep these secure!
-define('GOOGLE_CLIENT_ID', '362858628545-vs7vp07q7qmkh2o894nj6995bueea7er.apps.googleusercontent.com');
-define('GOOGLE_CLIENT_SECRET', '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');
-// Facebook sign-in removed from site.
+define('GOOGLE_CLIENT_ID', getenv('GOOGLE_CLIENT_ID') ?: '');
+define('GOOGLE_CLIENT_SECRET', getenv('GOOGLE_CLIENT_SECRET') ?: '');

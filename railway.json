@@ -1,19 +1,10 @@
 {
-  "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "nixpacksPlan": {
-      "phases": {
-        "setup": {
-          "nixPkgs": [
-            "php83",
-            "php83Extensions.pdo_mysql",
-            "php83Extensions.mysqli",
-            "php83Extensions.gd",
-            "php83Extensions.bcmath",
-            "php83Extensions.mbstring"
-          ]
-        }
-      }
-    }
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "healthcheckPath": "/",
+    "healthcheckTimeout": 100,
+    "restartPolicyType": "ON_FAILURE"
   }
 }

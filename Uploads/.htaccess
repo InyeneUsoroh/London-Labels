@@ -1,8 +1,6 @@
-# Prevent directory browsing for security
-Options -Indexes
-
-# Restrict access to only common web media types
-<FilesMatch "\.(?i:php|phtml|php5|pl|py|jsp|asp|sh|cgi|exe)$">
-    Order allow,deny
-    Deny from all
+# Disable execution of PHP scripts in this directory
+php_flag engine off
+<FilesMatch "\.(php|php4|php5|php7|php8|phtml|pl|py|jsp|asp|sh|cgi)$">
+    Order Deny,Allow
+    Deny from All
 </FilesMatch>

@@ -1,14 +1,5 @@
 {
     "require": {
-        "phpmailer/phpmailer": "^7.0",
-        "ext-pdo_mysql": "*",
-        "ext-mysqlnd": "*",
-        "ext-bcmath": "*",
-        "ext-gd": "*"
-    },
-    "config": {
-        "platform": {
-            "php": "8.3"
-        }
+        "phpmailer/phpmailer": "^7.0"
     }
 }
