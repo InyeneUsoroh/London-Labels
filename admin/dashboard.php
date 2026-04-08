@@ -91,8 +91,8 @@ include __DIR__ . '/inc_admin_layout.php';
 <div class="admin-stats-grid">
     <div class="admin-stat-card tone-magenta">
         <p class="admin-stat-label">Total Revenue</p>
-        <p class="admin-stat-value"><?= format_price($total_revenue) ?></p>
-        <p class="admin-stat-sub">Confirmed payments</p>
+        <p class="admin-stat-value"><?= $total_revenue > 0 ? format_price($total_revenue) : '—' ?></p>
+        <p class="admin-stat-sub"><?= $total_revenue > 0 ? 'Confirmed payments' : 'No confirmed payments yet' ?></p>
     </div>
     <div class="admin-stat-card tone-blue">
         <p class="admin-stat-label">Total Orders</p>
