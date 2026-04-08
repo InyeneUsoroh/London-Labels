@@ -77,7 +77,7 @@ if ($action === 'update_sort') {
 
 if ($action === 'upload') {
     // Use the correct Uploads directory (capital U, matching UPLOAD_DIR and sanitize_local_upload_media_url)
-    $upload_dir = rtrim(UPLOAD_DIR, '/\\') . '/products/';
+    $upload_dir = rtrim(UPLOAD_DIR, '/\\') . '/Products/';
     if (!is_dir($upload_dir)) {
         if (!mkdir($upload_dir, 0755, true)) {
             $err_msg = json_encode(['success' => false, 'successCount' => 0, 'errors' => ['Server error: could not create upload directory.']]);
@@ -113,7 +113,7 @@ if ($action === 'upload') {
 
                 if (move_uploaded_file($files['tmp_name'][$i], $dest)) {
                     // URL must contain /Uploads/ (capital U) to pass sanitize_local_upload_media_url()
-                    $image_url = BASE_URL . '/Uploads/products/' . $new_name;
+                    $image_url = BASE_URL . '/Uploads/Products/' . $new_name;
 
                     // First image gets primary flag
                     $stmt = $pdo->prepare("SELECT COUNT(*) FROM product_images WHERE product_id = ?");
