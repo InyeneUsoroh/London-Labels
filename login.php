@@ -55,8 +55,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         remember_trusted_device($user_id);
                     }
 
-                    $redirect = $_GET['redirect'] ?? BASE_URL . '/index.php';
-                    if (!str_starts_with($redirect, BASE_URL)) {
+                    $redirect = $_GET['redirect'] ?? '';
+                    // Guard against open redirect: only allow same-origin paths
+                    $base = rtrim(BASE_URL, '/');
+                    if (
+                        $redirect === '' ||
+                        ($base !== '' && !str_starts_with($redirect, $base . '/')) ||
+                        ($base === '' && (!str_starts_with($redirect, '/') || str_starts_with($redirect, '//')))
+                    ) {
                         $redirect = BASE_URL . '/index.php';
                     }
 

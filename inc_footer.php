@@ -100,139 +100,6 @@
         </div>
     </footer>
     <script>
-        (function () {
-            var navToggle = document.getElementById('navToggle');
-            var nav = document.getElementById('primaryNav');
-            var navOverlay = document.getElementById('navOverlay');
-            if (!navToggle || !nav) {
-                return;
-            }
-
-            function isMobile() {
-                return window.matchMedia('(max-width: 768px)').matches;
-            }
-
-            function closeMobileNav() {
-                nav.classList.remove('open');
-                navToggle.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('nav-open');
-                nav.querySelectorAll('.dropdown.open').forEach(function (el) {
-                    el.classList.remove('open');
-                    var toggle = el.querySelector('.dropdown-toggle');
-                    if (toggle) {
-                        toggle.setAttribute('aria-expanded', 'false');
-                    }
-                });
-            }
-
-            function openMobileNav() {
-                nav.classList.add('open');
-                navToggle.setAttribute('aria-expanded', 'true');
-                document.body.classList.add('nav-open');
-            }
-
-            navToggle.addEventListener('click', function () {
-                var open = nav.classList.contains('open');
-                if (open) {
-                    closeMobileNav();
-                    return;
-                }
-                openMobileNav();
-            });
-
-            if (navOverlay) {
-                navOverlay.addEventListener('click', function () {
-                    if (!isMobile()) {
-                        return;
-                    }
-                    closeMobileNav();
-                });
-            }
-
-            nav.querySelectorAll('.dropdown > .dropdown-toggle').forEach(function (toggle) {
-                toggle.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    var parent = toggle.parentElement;
-                    var wasOpen = parent.classList.contains('open');
-                    nav.querySelectorAll('.dropdown.open').forEach(function (el) {
-                        el.classList.remove('open');
-                        var openToggle = el.querySelector('.dropdown-toggle');
-                        if (openToggle) {
-                            openToggle.setAttribute('aria-expanded', 'false');
-                        }
-                    });
-                    var nowOpen = !wasOpen;
-                    if (nowOpen) {
-                        parent.classList.add('open');
-                    }
-                    toggle.setAttribute('aria-expanded', nowOpen ? 'true' : 'false');
-                });
-
-                // Close on mouseleave (desktop only)
-                var parent = toggle.parentElement;
-                parent.addEventListener('mouseleave', function () {
-                    if (isMobile()) return;
-                    parent.classList.remove('open');
-                    toggle.setAttribute('aria-expanded', 'false');
-                });
-            });
-
-            nav.querySelectorAll('a').forEach(function (link) {
-                link.addEventListener('click', function () {
-                    if (!isMobile()) {
-                        return;
-                    }
-                    var dropdownToggle = link.classList.contains('dropdown-toggle');
-                    if (!dropdownToggle) {
-                        closeMobileNav();
-                    }
-                });
-            });
-
-            document.addEventListener('click', function (event) {
-                var clickedInsideDropdown = event.target.closest('.dropdown');
-                if (!clickedInsideDropdown) {
-                    nav.querySelectorAll('.dropdown.open').forEach(function (el) {
-                        el.classList.remove('open');
-                        var openToggle = el.querySelector('.dropdown-toggle');
-                        if (openToggle) {
-                            openToggle.setAttribute('aria-expanded', 'false');
-                        }
-                    });
-                }
-
-                if (!isMobile()) {
-                    return;
-                }
-                var clickedInsideNav = nav.contains(event.target) || navToggle.contains(event.target);
-                if (!clickedInsideNav) {
-                    closeMobileNav();
-                }
-            });
-
-            document.addEventListener('keydown', function (event) {
-                if (event.key !== 'Escape') {
-                    return;
-                }
-                nav.querySelectorAll('.dropdown.open').forEach(function (el) {
-                    el.classList.remove('open');
-                    var openToggle = el.querySelector('.dropdown-toggle');
-                    if (openToggle) {
-                        openToggle.setAttribute('aria-expanded', 'false');
-                    }
-                });
-                if (nav.classList.contains('open')) {
-                    closeMobileNav();
-                }
-            });
-
-            window.addEventListener('resize', function () {
-                if (!isMobile()) {
-                    closeMobileNav();
-                }
-            });
-        })();
-
         // Password strength meter for registration
         (function () {
             var pwInput = document.querySelector('input[name="password"]');
@@ -422,7 +289,7 @@
                             appendHighlightedText(category, suggestion.category, searchTerm);
 
                             var price = document.createElement('span');
-                            price.textContent = '<?= CURRENCY_SYMBOL ?>' + suggestion.price;
+                            price.textContent = <?= json_encode(CURRENCY_SYMBOL) ?> + suggestion.price;
 
                             meta.appendChild(category);
                             meta.appendChild(price);
