@@ -29,5 +29,5 @@ RUN a2dismod mpm_event mpm_worker || true \
     && a2enmod mpm_prefork \
     && a2enmod rewrite
 
-# 8. Open the Port
-EXPOSE 80
+# 8. Set up Railway runtime execution (Bind to $PORT and enforce Prefork MPM)
+CMD ["/bin/sh", "-c", "a2dismod mpm_event mpm_worker ; a2enmod mpm_prefork ; sed -i \"s/80/$PORT/g\" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf ; apache2-foreground"]
