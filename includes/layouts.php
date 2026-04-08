@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * London Labels - Layout Helpers
  * Common layout functions for consistent page structure
@@ -150,4 +150,3 @@ function render_list_group($items) {
     }
     echo '</ul>';
 }
-?>

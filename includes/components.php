@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * London Labels - Reusable UI Components
  * Component rendering functions for consistent UI
@@ -257,4 +257,3 @@ function render_verification_banner() {
     echo '</div>';
     echo '</div>';
 }
-?>
