@@ -3338,17 +3338,9 @@ input:focus-visible:not(.nav-search-form input):not(.mob-search-bar input) {
     margin-bottom: 8px;
 }
 
-/* Mobile Buybar Balancing */
+/* Mobile Buybar — layout lives here, visibility controlled by media queries */
 .product-mobile-buybar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    border-top: 1px solid var(--border-color);
-    padding: 12px 16px;
-    z-index: 1000;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+    display: none; /* hidden on desktop — shown in @media (max-width: 900px) */
 }
 
 .product-mobile-buybar-actions {
@@ -3361,7 +3353,9 @@ input:focus-visible:not(.nav-search-form input):not(.mob-search-bar input) {
 .mobile-buybar-action-btn {
     width: 48px;
     height: 48px;
+    min-width: 48px;
     padding: 0;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3369,26 +3363,23 @@ input:focus-visible:not(.nav-search-form input):not(.mob-search-bar input) {
     border: 1px solid var(--border-color);
     color: var(--text-primary);
     border-radius: 2px;
+    cursor: pointer;
 }
 
 .mobile-buybar-action-btn.saved {
-    color: var(--magenta);
-    border-color: var(--magenta);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 .mobile-buybar-primary-btn {
     flex: 1;
+    min-width: 0;
     height: 48px;
     font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-@media (min-width: 769px) {
-    .product-mobile-buybar {
-        display: none;
-    }
+    letter-spacing: 0.08em;
+    text-align: center;
 }
 
 /* Minimal Trust/Benefits Section */
@@ -9637,56 +9628,7 @@ body.review-lightbox-open {
     background: #fafafa;
 }
 
-.product-mobile-buybar {
-    display: none;
-}
-
-.product-mobile-buybar-meta {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-}
-
-.product-mobile-buybar-price {
-    font-size: 16px;
-    font-weight: 800;
-    color: var(--text-primary);
-    line-height: 1;
-}
-
-.product-mobile-buybar-note {
-    margin-top: 3px;
-    font-size: 11px;
-    color: var(--text-secondary);
-}
-
-.product-mobile-buybar-btn {
-    min-width: 134px;
-    padding: 9px 15px;
-    font-size: 14px;
-    font-weight: 700;
-    text-align: center;
-}
-
-.product-mobile-share-trigger {
-    background: transparent;
-    border: none;
-    padding: 0;
-    width: 44px;
-    height: 44px;
-    color: var(--text-primary);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s ease, transform 0.2s ease;
-    flex-shrink: 0;
-}
-
-.product-mobile-share-trigger:active {
-    color: var(--primary-color);
-    transform: scale(0.9);
-}
+/* Mobile buybar visibility is controlled by the definition at line ~3342 and the @media (max-width: 900px) block below */
 
 
 @media (max-width: 600px) {
@@ -9815,11 +9757,8 @@ body.review-lightbox-open {
         right: 0;
         bottom: 0;
         z-index: 1090;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-        padding: 7px 11px calc(7px + env(safe-area-inset-bottom, 0px));
+        display: block;
+        padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
         background: rgba(255, 255, 255, 0.98);
         border-top: 1px solid var(--border-color);
         box-shadow: 0 -8px 20px rgba(15, 23, 42, 0.1);
