@@ -8145,9 +8145,9 @@ a.contact-info-value:hover {
 
 /* ── Breadcrumb ── */
 .product-breadcrumb {
-    max-width: 1400px;
+    max-width: 1440px;
     margin: 0 auto;
-    padding: 20px 48px 0;
+    padding: 20px 40px 0;
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.06em;
@@ -8242,7 +8242,7 @@ a.contact-info-value:hover {
     margin-top: 0;
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 32px;
 }
 
 .product-detail-side-support {
@@ -8252,7 +8252,7 @@ a.contact-info-value:hover {
     display: flex;
     flex-direction: column;
     gap: 32px;
-    margin-top: 56px;
+    margin-top: 0;
 }
 
 .product-gallery-support > .product-fulfillment-summary,
@@ -9620,6 +9620,17 @@ body.review-lightbox-open {
     display: inline-block;
 }
 
+/* Tablet: narrow column gap, keep 2-col */
+@media (max-width: 1100px) {
+    .product-detail-layout {
+        padding: 20px 24px 40px;
+        column-gap: 32px;
+    }
+    .product-breadcrumb {
+        padding: 16px 24px 0;
+    }
+}
+
 /* â”€â”€ Responsive â”€â”€ */
 @media (max-width: 900px) {
     .product-detail-layout {
@@ -9629,8 +9640,12 @@ body.review-lightbox-open {
             "buy"
             "side"
             "support";
-        gap: 32px;
-        padding: 24px 20px 48px;
+        gap: 24px;
+        padding: 20px 20px 48px;
+    }
+
+    .product-breadcrumb {
+        padding: 14px 20px 0;
     }
 
     body.product-page-has-buybar {
@@ -9713,12 +9728,12 @@ body.review-lightbox-open {
 
     .product-breadcrumb--mobile {
         display: flex;
-        padding: 14px 24px 0;
+        padding: 14px 16px 0;
     }
 
     .product-detail-layout {
         padding: 16px 16px 40px;
-        gap: 24px;
+        gap: 20px;
     }
 
     .product-thumb-grid {
