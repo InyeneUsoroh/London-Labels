@@ -69,7 +69,11 @@ html, body {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+}
+
+/* Prevent horizontal scroll without breaking position:fixed (buybar, modals) */
+html {
+    overflow-x: clip;
 }
 
 /* Heading Typography */
@@ -1435,7 +1439,6 @@ input:focus-visible:not(.nav-search-form input):not(.mob-search-bar input) {
     margin: 32px auto;
     padding: 0 20px;
     min-height: calc(100vh - 300px);
-    overflow-x: hidden;
 }
 
 /* ===== ALERTS (LEGACY CLASS SUPPORT) ===== */
@@ -8201,7 +8204,7 @@ a.contact-info-value:hover {
 .product-detail-layout {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 24px 60px 40px;
+    padding: 24px 40px 40px;
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
     grid-template-areas:
@@ -9805,7 +9808,7 @@ body.review-lightbox-open {
     }
 
     .product-detail-layout {
-        padding: 20px 24px 40px;
+        padding: 16px 16px 40px;
         gap: 24px;
     }
 
