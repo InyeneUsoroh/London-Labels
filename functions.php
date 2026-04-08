@@ -1,4 +1,9 @@
 <?php
+// Start output buffering at the very first line — before any include can
+// accidentally output whitespace. This is the true entry point for all pages.
+if (!ob_get_level()) {
+    ob_start();
+}
 
 function trusted_device_user_agent(): string {
     return $_SERVER['HTTP_USER_AGENT'] ?? '';
