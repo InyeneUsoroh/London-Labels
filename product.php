@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * London Labels - Product Details Page
  */
