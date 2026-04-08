@@ -45,10 +45,13 @@ if (!defined('BASE_URL')) {
 
 // ===== MAILER CONFIGURATION (Mailtrap SMTP) =====
 define('MAIL_HOST', getenv('MAIL_HOST') ?: 'sandbox.smtp.mailtrap.io');
-define('MAIL_PORT', getenv('MAIL_PORT') ?: 465);
+define('MAIL_PORT', (int)(getenv('MAIL_PORT') ?: 465));
 define('MAIL_USERNAME', getenv('MAIL_USERNAME') ?: '');
 define('MAIL_PASSWORD', getenv('MAIL_PASSWORD') ?: '');
-define('MAIL_ENCRYPTION', getenv('MAIL_ENCRYPTION') ?: 'tls');
+
+// Auto-switch encryption: 465 usually means 'ssl', 587 usually means 'tls'
+$defaultEnc = (MAIL_PORT === 465) ? 'ssl' : 'tls';
+define('MAIL_ENCRYPTION', getenv('MAIL_ENCRYPTION') ?: $defaultEnc);
 define('MAIL_FROM', 'noreply@londonlabels.com');
 define('MAIL_FROM_NAME', 'London Labels');
 

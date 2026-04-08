@@ -54,6 +54,7 @@ function send_reset_email(string $toEmail, string $toName, string $resetLink, ?s
         $mail->Password   = MAIL_PASSWORD;
         $mail->SMTPSecure = MAIL_ENCRYPTION;
         $mail->Port       = MAIL_PORT;
+        $mail->Timeout    = 10; // Prevent long hangs
 
         $mail->setFrom(MAIL_FROM, MAIL_FROM_NAME);
         $mail->addAddress($toEmail, $toName ?: $toEmail);
@@ -72,6 +73,7 @@ function send_reset_email(string $toEmail, string $toName, string $resetLink, ?s
         ");
         $mail->AltBody = "Hi {$safeName},\n\nReset your password (valid 30 minutes):\n{$resetLink}\n\nIf you did not request this, ignore this email.\n\n— {$siteName}";
 
+        session_write_close(); // Unblock other requests from this user while we wait for SMTP
         $mail->send();
         return true;
     } catch (Exception $ex) {
@@ -212,6 +214,7 @@ function send_contact_notification(string $fromEmail, string $fromName, string $
         $adminMail->Password   = MAIL_PASSWORD;
         $adminMail->SMTPSecure = MAIL_ENCRYPTION;
         $adminMail->Port       = MAIL_PORT;
+        $adminMail->Timeout    = 10;
 
         $adminMail->setFrom(MAIL_FROM, MAIL_FROM_NAME);
         $adminMail->addAddress($adminEmail, $siteName . ' Support');
@@ -233,6 +236,8 @@ function send_contact_notification(string $fromEmail, string $fromName, string $
             <a href='mailto:{$safeEmail}?subject=Re%3A%20{$safeSubject}' style='display:inline-block;padding:12px 28px;background:#e8357e;color:#ffffff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600;'>Reply to {$safeName}</a>
         ");
         $adminMail->AltBody = "New contact message from {$fromName} ({$fromEmail})\n\nSubject: {$subject}\n\n{$message}";
+
+        session_write_close(); 
         $adminMail->send();
     } catch (Exception $ex) {
         $error = $adminMail->ErrorInfo ?: $ex->getMessage();
