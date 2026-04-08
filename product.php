@@ -690,8 +690,9 @@ if (!empty($product)): ?>
 
                     <button type="button" class="btn product-action-secondary-btn product-share-trigger" data-share-url="<?= e($share_url) ?>" data-share-title="<?= e($product['name']) ?>" aria-label="Share">
                         <svg class="product-share-trigger-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                            <path fill="currentColor" stroke="none" d="M14 2l6 6-6 6v-4c-4 0-7 2-8 6 0-5 3-10 8-10V2z"></path>
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                            <polyline points="16 6 12 2 8 6"></polyline>
+                            <line x1="12" y1="2" x2="12" y2="15"></line>
                         </svg>
                     </button>
                 </div>
@@ -724,8 +725,9 @@ if (!empty($product)): ?>
 
                 <button type="button" class="btn mobile-buybar-action-btn product-share-trigger" data-share-url="<?= e($share_url) ?>" data-share-title="<?= e($product['name']) ?>" aria-label="Share">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <path fill="currentColor" stroke="none" d="M14 2l6 6-6 6v-4c-4 0-7 2-8 6 0-5 3-10 8-10V2z"></path>
+                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                        <polyline points="16 6 12 2 8 6"></polyline>
+                        <line x1="12" y1="2" x2="12" y2="15"></line>
                     </svg>
                 </button>
 
@@ -1315,67 +1317,7 @@ if (!empty($product)): ?>
         updateActiveState(0);
     })();
 
-    // Share popover toggle (compact utility on gallery)
-    (function () {
-        var trigger = document.getElementById('productShareTrigger');
-        var popover = document.getElementById('productSharePopover');
-        var container = document.getElementById('productShareTop');
-        var copyLinkBtn = document.getElementById('productShareCopyLink');
-        if (!trigger || !popover || !container) return;
-
-        function closePopover() {
-            popover.hidden = true;
-            trigger.setAttribute('aria-expanded', 'false');
-        }
-
-        function openPopover() {
-            popover.hidden = false;
-            trigger.setAttribute('aria-expanded', 'true');
-        }
-
-        trigger.addEventListener('click', function () {
-            if (popover.hidden) {
-                openPopover();
-            } else {
-                closePopover();
-            }
-        });
-
-        document.addEventListener('click', function (event) {
-            if (!container.contains(event.target)) {
-                closePopover();
-            }
-        });
-
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape') {
-                closePopover();
-            }
-        });
-
-        if (copyLinkBtn) {
-            var defaultCopyLabel = copyLinkBtn.querySelector('.product-share-label');
-            copyLinkBtn.addEventListener('click', function () {
-                var shareUrl = copyLinkBtn.getAttribute('data-share-url') || window.location.href;
-
-                function showCopiedState() {
-                    if (!defaultCopyLabel) return;
-                    defaultCopyLabel.textContent = 'Copied';
-                    window.setTimeout(function () {
-                        defaultCopyLabel.textContent = 'Copy link';
-                    }, 1400);
-                }
-
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(shareUrl).then(showCopiedState).catch(function () {
-                        window.prompt('Copy this link:', shareUrl);
-                    });
-                } else {
-                    window.prompt('Copy this link:', shareUrl);
-                }
-            });
-        }
-    })();
+    // Share is handled globally by initQuickShare() in hamburger-menu.js
 
     // Size selector
     (function () {
@@ -1552,47 +1494,7 @@ if (!empty($product)): ?>
         });
     })();
 
-    // Elite Native Web Share Migration (Event Delegation with HTTP Fallback)
-    (function () {
-        document.addEventListener('click', function (e) {
-            var target = e.target.closest('#productShareTrigger, #mobileShareTrigger');
-            if (!target) return;
-            
-            e.preventDefault();
-            var shareData = {
-                title: <?= json_encode($product['name'] ?? '') ?>,
-                text: <?= json_encode('Check out this ' . ($product['name'] ?? '') . ' on London Labels') ?>,
-                url: <?= json_encode($share_url ?? '') ?>
-            };
-
-            // 1. Try Native iOS/Android System Share (Requires HTTPS)
-            if (navigator.share) {
-                navigator.share(shareData).catch(function(err) { 
-                    console.log('Native share failed or was cancelled:', err);
-                });
-            } 
-            // 2. Try Premium Clipboard API (Requires HTTPS or Localhost)
-            else if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(shareData.url).then(function() {
-                    var originalColor = target.style.color;
-                    target.style.color = 'var(--primary-color)';
-                    setTimeout(function(){ target.style.color = originalColor || ''; }, 2000);
-                    alert('Product link copied to clipboard!');
-                }).catch(function(err) {
-                    console.error('Clipboard failed:', err);
-                });
-            } 
-            // 3. Ultimate Fallback (For XAMPP Mobile Testing over HTTP IP Addresses)
-            else {
-                // If the user is testing on their phone over local network (HTTP), both APIs are disabled by Safari/Chrome.
-                // We provide a manual prompt so the button always responds.
-                var originalColor = target.style.color;
-                target.style.color = 'var(--primary-color)';
-                setTimeout(function(){ target.style.color = originalColor || ''; }, 200);
-                prompt("Share is restricted on non-HTTPS local networks.\nCopy link manually:", shareData.url);
-            }
-        });
-    })();
+    // Share is handled globally by initQuickShare() in hamburger-menu.js
 </script>
 
 <?php include __DIR__ . '/inc_footer.php'; ?>
