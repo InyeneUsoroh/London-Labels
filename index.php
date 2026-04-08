@@ -5,20 +5,19 @@
 require_once __DIR__ . '/functions.php';
 
 $page_title = 'Home';
-$page_errors = [];
-$page_notice = '';
 
-include __DIR__ . '/inc_header.php';
-
+// Fetch all data before rendering the header
 // Featured: admin-selected products only (curated by admin, no auto-fill)
 $featured_products = get_featured_products(4);
 
 // New arrivals: manually marked OR added in last 30 days (auto-fresh, manual override)
 $new_arrivals = get_new_arrival_products(4);
-$categories = array_slice(get_all_categories(), 0, 4);
+$categories = get_all_categories_limited(4);
 
 // Wishlist state for logged-in users
 $wishlist_ids = is_logged_in() ? get_user_wishlist_product_ids((int)current_user_id()) : get_guest_wishlist_product_ids();
+
+include __DIR__ . '/inc_header.php';
 ?>
 
 <?php if (($_GET['account'] ?? '') === 'deleted'): ?>

@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errors)) {
 
             // Initialise Paystack transaction
             $amount_kobo = (int)round($subtotal * 100); // Paystack uses kobo
-            $reference   = 'LL-' . time() . '-' . current_user_id();
+            $reference   = 'LL-' . time() . '-' . (is_logged_in() ? (int)current_user_id() : 0);
             $callback    = BASE_URL . '/paystack-callback.php';
 
             $payload = json_encode([
@@ -166,6 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errors)) {
             ]);
             $response = curl_exec($ch);
             $curl_err = curl_error($ch);
+            curl_close($ch);
 
             if ($curl_err) {
                 $errors[] = 'Could not connect to payment provider. Please try again.';
