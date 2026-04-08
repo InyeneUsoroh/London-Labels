@@ -478,7 +478,8 @@ function e(string $s): string {
  * e.g. format_price(15000) -> "{CURRENCY_SYMBOL}15,000.00"
  */
 function format_price(float $amount): string {
-    return CURRENCY_SYMBOL . number_format($amount, 2);
+    // Explicit separators prevent locale-dependent number_format behaviour on Railway
+    return CURRENCY_SYMBOL . number_format($amount, 2, '.', ',');
 }
 
 // ===== AUTHENTICATION HELPERS =====

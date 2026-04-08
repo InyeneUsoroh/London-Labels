@@ -78,7 +78,7 @@ define('CONTACT_PHONE_HREF', 'tel:+2348000000000'); // Replace with your real nu
 define('CUSTOMER_CARE_HOURS', '9AM – 6PM WAT');
 
 // ===== CURRENCY =====
-if (!defined('CURRENCY_SYMBOL')) define('CURRENCY_SYMBOL', '₦');
+if (!defined('CURRENCY_SYMBOL')) define('CURRENCY_SYMBOL', "\u{20A6}"); // ₦ Naira sign
 if (!defined('CURRENCY_CODE')) define('CURRENCY_CODE', 'NGN');
 define('UPLOAD_DIR', __DIR__ . '/Uploads/');
 define('MAX_FILE_SIZE', 5 * 1024 * 1024); // 5MB
