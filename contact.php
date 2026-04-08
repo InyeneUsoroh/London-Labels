@@ -34,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             require_once __DIR__ . '/mailer.php';
             save_contact_message($name, $email, $subject, $message);
             $mailError = null;
-            send_contact_notification($email, $name, $subject, $message, $mailError);
-            $notice = 'sent';
+            $sent = send_contact_notification($email, $name, $subject, $message, $mailError);
+            $notice = $sent ? 'sent' : 'partial';
         }
     }
 }
@@ -60,10 +60,15 @@ include __DIR__ . '/inc_header.php';
         <!-- LEFT: Form or success state -->
         <div class="contact-form-col">
 
-            <?php if ($notice === 'sent'): ?>
+            <?php if ($notice === 'sent' || $notice === 'partial'): ?>
                 <div class="contact-success-state">
                     <h3 class="contact-success-title">Message Received</h3>
-                    <p>Thanks for reaching out. We'll get back to you within 24–48 hours at the email address you provided.</p>
+                    <p>Thanks for reaching out. We've received your message and will get back to you within 24–48 hours.</p>
+                    <?php if ($notice === 'partial'): ?>
+                        <p class="form-notice form-notice-warning" style="margin-top:20px; font-size: 14px;">
+                            <strong>Note:</strong> We saved your message, but our email notification system is currently slow. We will still see your message in our records!
+                        </p>
+                    <?php endif; ?>
                     <p>In the meantime, you can also reach us on <a href="<?= e(WHATSAPP_GROUP_URL) ?>" target="_blank" rel="noopener noreferrer">WhatsApp</a> for a faster response.</p>
                 </div>
 
