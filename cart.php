@@ -93,24 +93,22 @@ if (isset($_POST['ajax_update_qty'])) {
     exit;
 }
 
-// Handle remove from cart
-if (isset($_GET['remove'])) {
-    $product_id = (int)$_GET['remove'];
-    if (isset($_SESSION['cart'][$product_id])) {
-        unset($_SESSION['cart'][$product_id]);
-        unset($_SESSION['cart_variants'][$product_id]);
-        unset($_SESSION['cart_variant_ids'][$product_id]);
-        $notice = 'Item removed from cart.';
-    }
-}
-
 // Handle POST actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verify_csrf($_POST['csrf'] ?? '')) {
         $errors[] = 'Invalid request. Please try again.';
     } else {
         $action = $_POST['action'] ?? '';
-        if (isset($_POST['add_to_cart']) || $action === 'add_to_cart') {
+
+        if ($action === 'remove') {
+            $product_id = (int)($_POST['product_id'] ?? 0);
+            if (isset($_SESSION['cart'][$product_id])) {
+                unset($_SESSION['cart'][$product_id]);
+                unset($_SESSION['cart_variants'][$product_id]);
+                unset($_SESSION['cart_variant_ids'][$product_id]);
+                $notice = 'Item removed from cart.';
+            }
+        } elseif (isset($_POST['add_to_cart']) || $action === 'add_to_cart') {
             $product_id = (int)($_POST['product_id'] ?? 0);
             $qty = max(1, (int)($_POST['qty'] ?? 1));
             $product = get_product_by_id($product_id);
@@ -249,7 +247,12 @@ include __DIR__ . '/inc_header.php';
                                 <?= format_price($item['subtotal']) ?>
                             </div>
                             <div class="cart-item-remove">
-                                <a href="<?= BASE_URL ?>/cart.php?remove=<?= $item['product_id'] ?>" class="cart-remove-btn" aria-label="Remove <?= e($item['name']) ?> from cart">Remove</a>
+                                <form method="post" style="margin:0">
+                                    <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
+                                    <input type="hidden" name="action" value="remove">
+                                    <input type="hidden" name="product_id" value="<?= $item['product_id'] ?>">
+                                    <button type="submit" class="cart-remove-btn" aria-label="Remove <?= e($item['name']) ?> from cart">Remove</button>
+                                </form>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -304,20 +307,16 @@ include __DIR__ . '/inc_header.php';
                 });
             });
 
-            // Listen for Remove clicks (AJAX driven instead of page load)
+            // Listen for Remove clicks — submit the hidden form
             document.addEventListener('click', function(e) {
                 var removeBtn = e.target.closest('.cart-remove-btn');
                 if (!removeBtn) return;
-                
-                e.preventDefault();
+
+                // The button is inside a form — let it submit naturally
+                // but also update the UI optimistically
                 var card = removeBtn.closest('.cart-item');
-                if (!card) return;
-                
-                var pid = card.getAttribute('data-product-id');
-                var input = card.querySelector('.cart-qty-input');
-                if (input) {
-                    input.value = 0;
-                    updateQty(input, true); // true = force remove UI feedback
+                if (card) {
+                    card.classList.add('fade-out');
                     if (window.showToast) window.showToast('Item removed from cart', 'success');
                 }
             });

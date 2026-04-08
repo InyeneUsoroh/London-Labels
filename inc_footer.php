@@ -100,25 +100,6 @@
         </div>
     </footer>
     <script>
-        // Password strength meter for registration
-        (function () {
-            var pwInput = document.querySelector('input[name="password"]');
-            var meter = document.getElementById('pw-strength');
-            if (!pwInput || !meter) return;
-            pwInput.addEventListener('input', function () {
-                var val = pwInput.value;
-                var score = 0;
-                if (val.length >= 6) score++;
-                if (/[A-Z]/.test(val)) score++;
-                if (/[a-z]/.test(val)) score++;
-                if (/[0-9]/.test(val)) score++;
-                if (/[^A-Za-z0-9]/.test(val)) score++;
-                var levels = ['Too short', 'Weak', 'Fair', 'Good', 'Strong', 'Very strong'];
-                meter.textContent = levels[score];
-                meter.className = 'pw-strength-meter pw-strength-' + score;
-            });
-        })();
-
         (function () {
             var suggestEndpoint = '<?= BASE_URL ?>/search_suggest.php';
             var searchInputs = Array.prototype.slice.call(document.querySelectorAll('[data-autosuggest="products"]'));

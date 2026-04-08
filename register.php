@@ -62,10 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Auto-generate a unique username from first name + random suffix
                 $base_username = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $first_name));
                 if ($base_username === '') $base_username = 'user';
-                $username = $base_username . rand(1000, 9999);
-                // Ensure uniqueness
-                while (get_user_by_username($username)) {
-                    $username = $base_username . rand(1000, 9999);
+                $username = $base_username . random_int(1000, 9999);
+                // Ensure uniqueness — cap at 20 attempts to prevent infinite loop
+                $attempts = 0;
+                while (get_user_by_username($username) && $attempts < 20) {
+                    $username = $base_username . random_int(1000, 99999);
+                    $attempts++;
                 }
 
                 $password_hash = password_hash($password, PASSWORD_DEFAULT);

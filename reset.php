@@ -37,22 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $reset) {
     } else {
         $password = $_POST['password'] ?? '';
         $password_confirm = $_POST['password_confirm'] ?? '';
-        
-        // Password validation (same as registration)
-        if (empty($password)) {
-            $errors[] = 'Password is required.';
-        } elseif (strlen($password) < 8) {
-            $errors[] = 'Password must be at least 8 characters.';
-        } elseif (strlen($password) > 255) {
-            $errors[] = 'Password is too long.';
-        } elseif (!preg_match('/[A-Z]/', $password)) {
-            $errors[] = 'Password must contain at least one uppercase letter.';
-        } elseif (!preg_match('/[a-z]/', $password)) {
-            $errors[] = 'Password must contain at least one lowercase letter.';
-        } elseif (!preg_match('/[0-9]/', $password)) {
-            $errors[] = 'Password must contain at least one number.';
-        }
-        
+
+        validate_password($password, $errors);
+
         if ($password !== $password_confirm) {
             $errors[] = 'Passwords do not match.';
         }
@@ -92,170 +79,119 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $reset) {
 include __DIR__ . '/inc_header.php';
 ?>
 
-<div class="auth-shell">
-    <?php if ($password_updated): ?>
-        <div class="auth-header">
-            <h2>Password Reset Successful!</h2>
-            <p class="auth-subtitle">Your password has been updated</p>
-        </div>
-        
-        <div class="password-reset-success">
-            <?php render_alert('success', 'Your password has been successfully reset. You can now sign in with your new password.'); ?>
-            
-            <div class="password-reset-info">
-                <h3>Security Notice</h3>
-                <ul>
-                    <li>All trusted devices have been removed</li>
-                    <li>You'll need to sign in again on all devices</li>
-                    <li>Your account is now secure with your new password</li>
-                </ul>
+<div class="auth-page-wrap">
+    <div class="auth-card">
+
+        <?php if ($password_updated): ?>
+
+            <div class="auth-card-header">
+                <h2>Password updated</h2>
+                <p>You can now sign in with your new password.</p>
             </div>
-            
+
+            <div class="auth-notice auth-notice-success" role="status">
+                <p>All trusted devices have been signed out for your security.</p>
+            </div>
+
             <div class="form-group">
-                <a href="<?= BASE_URL ?>/login.php" class="btn primary btn-full btn-lg">Sign In Now</a>
+                <a href="<?= BASE_URL ?>/login.php" class="btn primary btn-full">Sign In Now</a>
             </div>
-        </div>
-    <?php elseif ($reset): ?>
-        <div class="auth-header">
-            <h2>Create New Password</h2>
-            <p class="auth-subtitle">Resetting password for <?= e($reset['email']) ?></p>
-        </div>
-        
-        <?php if (!empty($errors)): ?>
-            <?php render_alert('danger', $errors); ?>
+
+        <?php elseif ($reset): ?>
+
+            <div class="auth-card-header">
+                <h2>Create new password</h2>
+                <p>Resetting for <?= e($reset['email']) ?></p>
+            </div>
+
+            <?php if (!empty($errors)): ?>
+                <div class="auth-notice auth-notice-error" role="alert">
+                    <?php foreach ($errors as $err): ?><p><?= e($err) ?></p><?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+
+            <form method="post" class="auth-form" autocomplete="on" novalidate>
+                <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
+
+                <div class="form-group">
+                    <label for="password">New Password <span class="form-required">*</span></label>
+                    <input type="password" id="password" name="password" required
+                           autocomplete="new-password" placeholder="Create a strong password"
+                           minlength="8" aria-describedby="pw-reqs">
+                    <div class="pw-strength" id="pw-strength-label" aria-live="polite"></div>
+                    <ul class="pw-requirements" id="pw-reqs" aria-label="Password requirements">
+                        <li class="pw-req" id="req-length">At least 8 characters</li>
+                        <li class="pw-req" id="req-upper">One uppercase letter</li>
+                        <li class="pw-req" id="req-lower">One lowercase letter</li>
+                        <li class="pw-req" id="req-number">One number</li>
+                    </ul>
+                </div>
+
+                <div class="form-group">
+                    <label for="password_confirm">Confirm Password <span class="form-required">*</span></label>
+                    <input type="password" id="password_confirm" name="password_confirm" required
+                           autocomplete="new-password" placeholder="Re-enter your password">
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn primary btn-full">Reset Password</button>
+                </div>
+            </form>
+
+        <?php else: ?>
+
+            <div class="auth-card-header">
+                <h2>Link expired</h2>
+                <p>This reset link is no longer valid.</p>
+            </div>
+
+            <div class="auth-notice auth-notice-error" role="alert">
+                <?php foreach ($errors as $err): ?><p><?= e($err) ?></p><?php endforeach; ?>
+            </div>
+
+            <div class="form-group">
+                <a href="<?= BASE_URL ?>/forgot.php" class="btn primary btn-full">Request New Link</a>
+            </div>
+
         <?php endif; ?>
-        
-        <form method="post" class="form auth-form" autocomplete="on" novalidate id="reset-form">
-            <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
-            
-            <?php render_form_input([
-                'label' => 'New Password',
-                'name' => 'password',
-                'type' => 'password',
-                'required' => true,
-                'placeholder' => 'Create a strong password',
-                'autocomplete' => 'new-password',
-                'minlength' => 8,
-                'maxlength' => 255,
-                'describedby' => 'password-requirements',
-                'error' => ''
-            ]); ?>
-            
-            <div class="form-group">
-                <div id="password-strength" class="password-strength" aria-live="polite"></div>
-                <ul id="password-requirements" class="password-requirements">
-                    <li id="req-length">At least 8 characters</li>
-                    <li id="req-uppercase">One uppercase letter</li>
-                    <li id="req-lowercase">One lowercase letter</li>
-                    <li id="req-number">One number</li>
-                </ul>
-            </div>
-            
-            <?php render_form_input([
-                'label' => 'Confirm New Password',
-                'name' => 'password_confirm',
-                'type' => 'password',
-                'required' => true,
-                'placeholder' => 'Re-enter your password',
-                'autocomplete' => 'new-password',
-                'error' => ''
-            ]); ?>
-            
-            <div class="form-group">
-                <button type="submit" class="btn primary btn-full btn-lg">Reset Password</button>
-            </div>
-        </form>
-    <?php else: ?>
-        <div class="auth-header">
-            <h2>Invalid Reset Link</h2>
-            <p class="auth-subtitle">This link is no longer valid</p>
+
+        <div class="auth-card-footer">
+            <p>Remember your password? <a href="<?= BASE_URL ?>/login.php">Sign In</a></p>
         </div>
-        
-        <?php render_alert('danger', $errors); ?>
-        
-        <div class="password-reset-help">
-            <h3>What happened?</h3>
-            <p>Password reset links expire after 30 minutes for security reasons. The link may have:</p>
-            <ul>
-                <li>Expired (older than 30 minutes)</li>
-                <li>Already been used</li>
-                <li>Been entered incorrectly</li>
-            </ul>
-            
-            <div class="form-group">
-                <a href="<?= BASE_URL ?>/forgot.php" class="btn primary btn-full">Request New Reset Link</a>
-            </div>
-        </div>
-    <?php endif; ?>
-    
-    <div class="auth-footer">
-        <p>Remember your password? <a href="<?= BASE_URL ?>/login.php" class="auth-link">Sign In</a></p>
+
     </div>
 </div>
 
 <script>
-// Password strength meter (same as registration)
-(function() {
-    const passwordInput = document.querySelector('input[name="password"]');
-    const strengthDiv = document.getElementById('password-strength');
-    const requirements = {
-        length: document.getElementById('req-length'),
-        uppercase: document.getElementById('req-uppercase'),
-        lowercase: document.getElementById('req-lowercase'),
-        number: document.getElementById('req-number')
-    };
-    
-    if (!passwordInput || !strengthDiv) return;
-    
-    passwordInput.addEventListener('input', function() {
-        const password = this.value;
-        let strength = 0;
-        let strengthText = '';
-        let strengthClass = '';
-        
-        // Check requirements
-        const checks = {
-            length: password.length >= 8,
-            uppercase: /[A-Z]/.test(password),
-            lowercase: /[a-z]/.test(password),
-            number: /[0-9]/.test(password)
+(function () {
+    var pw        = document.getElementById('password');
+    var label     = document.getElementById('pw-strength-label');
+    var reqLength = document.getElementById('req-length');
+    var reqUpper  = document.getElementById('req-upper');
+    var reqLower  = document.getElementById('req-lower');
+    var reqNumber = document.getElementById('req-number');
+
+    if (!pw || !label) return;
+
+    pw.addEventListener('input', function () {
+        var v = pw.value;
+        var checks = {
+            length: v.length >= 8,
+            upper:  /[A-Z]/.test(v),
+            lower:  /[a-z]/.test(v),
+            number: /[0-9]/.test(v),
         };
-        
-        // Update requirement indicators
-        Object.keys(checks).forEach(key => {
-            if (requirements[key]) {
-                if (checks[key]) {
-                    requirements[key].classList.add('met');
-                    strength++;
-                } else {
-                    requirements[key].classList.remove('met');
-                }
-            }
-        });
-        
-        // Calculate strength
-        if (password.length === 0) {
-            strengthDiv.textContent = '';
-            strengthDiv.className = 'password-strength';
-            return;
-        }
-        
-        if (strength === 4) {
-            strengthText = 'Strong password';
-            strengthClass = 'strong';
-        } else if (strength === 3) {
-            strengthText = 'Good password';
-            strengthClass = 'good';
-        } else if (strength >= 2) {
-            strengthText = 'Fair password';
-            strengthClass = 'fair';
-        } else {
-            strengthText = 'Weak password';
-            strengthClass = 'weak';
-        }
-        
-        strengthDiv.textContent = strengthText;
-        strengthDiv.className = 'password-strength ' + strengthClass;
+        reqLength && reqLength.classList.toggle('pw-met', checks.length);
+        reqUpper  && reqUpper.classList.toggle('pw-met',  checks.upper);
+        reqLower  && reqLower.classList.toggle('pw-met',  checks.lower);
+        reqNumber && reqNumber.classList.toggle('pw-met', checks.number);
+
+        var score = Object.values(checks).filter(Boolean).length;
+        if (v.length === 0) { label.textContent = ''; label.className = 'pw-strength'; return; }
+        var levels  = ['', 'Weak', 'Fair', 'Fair', 'Good', 'Strong'];
+        var classes = ['', 'pw-weak', 'pw-fair', 'pw-fair', 'pw-good', 'pw-strong'];
+        label.textContent = levels[score] || '';
+        label.className   = 'pw-strength ' + (classes[score] || '');
     });
 })();
 </script>
