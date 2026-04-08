@@ -8525,8 +8525,6 @@ a.contact-info-value:hover {
     grid-area: buy;
     min-width: 0;
     width: 100%;
-    position: sticky;
-    top: 88px;
     align-self: start;
 }
 
@@ -8706,7 +8704,8 @@ a.contact-info-value:hover {
     margin-bottom: 16px;
 }
 
-.product-qty-wrap label {
+.product-qty-wrap label,
+.qty-label {
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
@@ -8715,21 +8714,65 @@ a.contact-info-value:hover {
     white-space: nowrap;
 }
 
-.product-qty-input {
-    width: 72px;
-    height: 42px;
-    padding: 0 12px;
+/* Stepper control */
+.qty-stepper {
+    display: flex;
+    align-items: center;
     border: 1px solid var(--border-color);
     border-radius: 2px;
+    overflow: hidden;
+    height: 42px;
+}
+
+.qty-stepper-btn {
+    width: 40px;
+    height: 100%;
+    border: none;
+    background: #f9f9f9;
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 300;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.qty-stepper-btn:hover:not(:disabled) {
+    background: #f0f0f0;
+}
+
+.qty-stepper-btn:disabled {
+    color: #d1d5db;
+    cursor: not-allowed;
+}
+
+.qty-stepper-btn:first-child {
+    border-right: 1px solid var(--border-color);
+}
+
+.qty-stepper-btn:last-child {
+    border-left: 1px solid var(--border-color);
+}
+
+.product-qty-input {
+    width: 52px;
+    height: 100%;
+    padding: 0 8px;
+    border: none;
+    border-radius: 0;
     font-family: var(--font-primary);
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     text-align: center;
     color: var(--text-primary);
+    background: #fff;
     outline: none;
-    transition: border-color 0.2s;
-    appearance: textfield;
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .product-qty-input::-webkit-outer-spin-button,

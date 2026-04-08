@@ -627,7 +627,6 @@ if (!empty($product)): ?>
                     <div class="product-size-wrap">
                         <div class="product-size-label-row">
                             <span class="product-size-heading">Size</span>
-                            <span class="product-size-selected" id="size-selected-text">&mdash; Select a size</span>
                         </div>
                         <div class="product-size-grid" role="group" aria-label="Select size">
                             <?php foreach ($variants as $v):
@@ -650,9 +649,11 @@ if (!empty($product)): ?>
                     <?php endif; ?>
 
                     <div class="product-qty-wrap">
-                        <label for="qty" class="qty-label">Quantity</label>
-                        <div class="qty-control">
-                            <input type="number" id="qty" name="qty" value="1" min="1" max="<?= $display_stock_qty ?>" class="product-qty-input">
+                        <label class="qty-label">Quantity</label>
+                        <div class="qty-stepper">
+                            <button type="button" class="qty-stepper-btn" id="qty-minus" aria-label="Decrease quantity">−</button>
+                            <input type="number" id="qty" name="qty" value="1" min="1" max="<?= $display_stock_qty ?>" class="product-qty-input" aria-label="Quantity" readonly>
+                            <button type="button" class="qty-stepper-btn" id="qty-plus" aria-label="Increase quantity">+</button>
                         </div>
                     </div>
                 </form>
@@ -1487,6 +1488,36 @@ if (!empty($product)): ?>
     })();
 
     // Share is handled globally by initQuickShare() in hamburger-menu.js
+
+    // Quantity stepper
+    (function () {
+        var input    = document.getElementById('qty');
+        var minusBtn = document.getElementById('qty-minus');
+        var plusBtn  = document.getElementById('qty-plus');
+        if (!input || !minusBtn || !plusBtn) return;
+
+        function update() {
+            var val = parseInt(input.value, 10) || 1;
+            var min = parseInt(input.min, 10) || 1;
+            var max = parseInt(input.max, 10) || 99;
+            minusBtn.disabled = val <= min;
+            plusBtn.disabled  = val >= max;
+        }
+
+        minusBtn.addEventListener('click', function () {
+            var val = parseInt(input.value, 10) || 1;
+            var min = parseInt(input.min, 10) || 1;
+            if (val > min) { input.value = val - 1; update(); }
+        });
+
+        plusBtn.addEventListener('click', function () {
+            var val = parseInt(input.value, 10) || 1;
+            var max = parseInt(input.max, 10) || 99;
+            if (val < max) { input.value = val + 1; update(); }
+        });
+
+        update();
+    })();
 </script>
 
 <?php include __DIR__ . '/inc_footer.php'; ?>
