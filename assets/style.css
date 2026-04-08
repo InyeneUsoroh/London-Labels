@@ -6624,6 +6624,14 @@ a.contact-info-value:hover {
     margin-top: 0;
 }
 
+/* Guest wishlist — full-width layout without account sidebar */
+.guest-wishlist-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    width: 100%;
+}
+
 .wishlist-card-actions {
     display: flex;
     flex-direction: column;

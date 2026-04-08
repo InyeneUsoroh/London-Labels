@@ -13,35 +13,11 @@ $page     = max(1, (int)($_GET['page'] ?? 1));
 $limit    = 10;
 $offset   = ($page - 1) * $limit;
 
-$orders = get_user_orders(current_user_id(), $limit, $offset);
+$orders      = get_user_orders(current_user_id(), $limit, $offset);
+$total       = count_user_orders((int)current_user_id());
+$total_pages = max(1, (int)ceil($total / $limit));
 
-$pdo  = get_pdo();
-$stmt = $pdo->prepare('SELECT COUNT(*) FROM Orders WHERE user_id = ?');
-$stmt->execute([current_user_id()]);
-$total       = (int)$stmt->fetchColumn();
-$total_pages = max(1, ceil($total / $limit));
-
-function order_progress_steps(string $status): array {
-    $all    = ['pending', 'processing', 'shipped', 'delivered'];
-    $labels = [
-        'pending'    => 'Order Placed',
-        'processing' => 'Processing',
-        'shipped'    => 'Out for Delivery',
-        'delivered'  => 'Delivered',
-    ];
-    $idx = array_search($status, $all, true);
-    if ($idx === false) $idx = -1;
-
-    $steps = [];
-    foreach ($all as $i => $step) {
-        $steps[] = [
-            'name'   => $labels[$step],
-            'done'   => $idx >= $i,
-            'active' => $idx === $i,
-        ];
-    }
-    return $steps;
-}
+// order_progress_steps() is defined in functions.php
 
 include __DIR__ . '/../inc_header.php';
 include __DIR__ . '/inc_account_layout.php';

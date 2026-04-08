@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $reset) {
                 $pdo = get_pdo();
                 
                 // Update password
-                update_user_password($pdo, (int)$reset['user_id'], $password);
+                update_user_password((int)$reset['user_id'], $password);
                 
                 // Mark reset token as used
                 mark_reset_used($pdo, (int)$reset['id']);

@@ -82,8 +82,8 @@ include __DIR__ . '/inc_account_layout.php';
         <a href="<?= BASE_URL ?>/contact.php" class="btn primary account-action-btn">Contact Support</a>
     </div>
     <div class="account-help-contact-info">
-        <p><strong>Email:</strong> <a href="mailto:<?= CONTACT_EMAIL ?>"><?= CONTACT_EMAIL ?></a></p>
-        <p><strong>Hours:</strong> <?= CUSTOMER_CARE_HOURS ?></p>
+        <p><strong>Email:</strong> <a href="mailto:<?= e(CONTACT_EMAIL) ?>"><?= e(CONTACT_EMAIL) ?></a></p>
+        <p><strong>Hours:</strong> <?= e(CUSTOMER_CARE_HOURS) ?></p>
         <p><strong>Response time:</strong> Within 24–48 hours</p>
     </div>
 </div>

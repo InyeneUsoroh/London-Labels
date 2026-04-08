@@ -482,6 +482,31 @@ function format_price(float $amount): string {
     return CURRENCY_SYMBOL . number_format($amount, 2, '.', ',');
 }
 
+/**
+ * Build order progress steps for display on orders/confirmation pages.
+ */
+function order_progress_steps(string $status): array {
+    $all    = ['pending', 'processing', 'shipped', 'delivered'];
+    $labels = [
+        'pending'    => 'Order Placed',
+        'processing' => 'Processing',
+        'shipped'    => 'Out for Delivery',
+        'delivered'  => 'Delivered',
+    ];
+    $idx = array_search($status, $all, true);
+    if ($idx === false) $idx = -1;
+
+    $steps = [];
+    foreach ($all as $i => $step) {
+        $steps[] = [
+            'name'   => $labels[$step],
+            'done'   => $idx >= $i,
+            'active' => $idx === $i,
+        ];
+    }
+    return $steps;
+}
+
 // ===== AUTHENTICATION HELPERS =====
 
 // ===== ADMIN CHECK =====
@@ -1013,21 +1038,11 @@ function mark_reset_used(PDO $pdo, int $resetId): void {
     $stmt->execute([$resetId]);
 }
 
-function update_user_password($arg1, $arg2, $arg3 = null): bool {
-    if ($arg1 instanceof PDO) {
-        $pdo = $arg1;
-        $userId = (int)$arg2;
-        $newPassword = (string)$arg3;
-        $hash = password_hash($newPassword, PASSWORD_DEFAULT);
-        $stmt = $pdo->prepare('UPDATE Users SET password_hash = ? WHERE user_id = ?');
-        return $stmt->execute([$hash, $userId]);
-    }
-
-    $userId = (int)$arg1;
-    $passwordHash = (string)$arg2;
-    $pdo = get_pdo();
+function update_user_password(int $userId, string $rawPassword): bool {
+    $hash = password_hash($rawPassword, PASSWORD_DEFAULT);
+    $pdo  = get_pdo();
     $stmt = $pdo->prepare('UPDATE Users SET password_hash = ? WHERE user_id = ?');
-    return $stmt->execute([$passwordHash, $userId]);
+    return $stmt->execute([$hash, $userId]);
 }
 
 // Optional: fake mailer for local dev (logs link on screen or to a file)

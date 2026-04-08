@@ -9,8 +9,8 @@ $account_page = 'profile';
 
 require_login();
 
-$user       = get_user_by_id(current_user_id());
-$full_name  = trim((string)($user['first_name'] ?? '') . ' ' . (string)($user['last_name'] ?? ''));
+$user       = get_user_by_id((int)current_user_id());
+$full_name  = $user ? trim((string)($user['first_name'] ?? '') . ' ' . (string)($user['last_name'] ?? '')) : '';
 
 // Fetch most recent order for the dashboard summary
 $recent_orders = get_user_orders(current_user_id(), 1, 0);

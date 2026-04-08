@@ -36,7 +36,7 @@ include __DIR__ . '/../inc_header.php';
 if ($is_member) {
     include __DIR__ . '/inc_account_layout.php';
 } else {
-    echo '<div class="account-shell guest-wishlist-shell"><div class="account-content" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; width: 100%;">';
+    echo '<div class="account-shell guest-wishlist-shell"><div class="account-content guest-wishlist-content">';
 }
 ?>
 

@@ -275,6 +275,18 @@ function get_all_categories(): array {
 }
 
 /**
+ * Get a limited number of categories (avoids fetching all then slicing in PHP)
+ */
+function get_all_categories_limited(int $limit = 4): array {
+    ensure_category_extras();
+    $pdo = get_pdo();
+    $stmt = $pdo->prepare('SELECT category_id, name, description, cover_image FROM Categories ORDER BY name ASC LIMIT ?');
+    $stmt->bindValue(1, $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+/**
  * Get category by ID
  */
 function get_category_by_id(int $category_id): ?array {
@@ -1208,6 +1220,15 @@ function get_user_orders(int $user_id, int $limit = 20, int $offset = 0): array 
     $stmt->bindValue(3, $offset, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll();
+}
+
+/**
+ * Count a user's orders (for pagination)
+ */
+function count_user_orders(int $user_id): int {
+    $stmt = get_pdo()->prepare('SELECT COUNT(*) FROM Orders WHERE user_id = ?');
+    $stmt->execute([$user_id]);
+    return (int)$stmt->fetchColumn();
 }
 
 /**

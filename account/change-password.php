@@ -36,8 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (empty($errors)) {
-            $hash = password_hash($new_password, PASSWORD_DEFAULT);
-            if (update_user_password((int)current_user_id(), $hash)) {
+            if (update_user_password((int)current_user_id(), $new_password)) {
                 revoke_all_trusted_devices_for_user((int)current_user_id());
                 header('Location: ' . BASE_URL . '/account/profile.php?saved=password');
                 exit;
