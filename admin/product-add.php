@@ -87,7 +87,7 @@ include __DIR__ . '/inc_admin_layout.php';
                 <input type="hidden" name="add_another" id="addAnotherFlag" value="">
 
                 <div class="form-group">
-                    <label for="name">Product Name <span style="color:#dc2626">*</span></label>
+                    <label for="name">Product Name <span class="admin-required">*</span></label>
                     <input type="text" id="name" name="name"
                            value="<?= e($name) ?>"
                            minlength="3" maxlength="120" required
@@ -99,13 +99,13 @@ include __DIR__ . '/inc_admin_layout.php';
                     <textarea id="description" name="description"
                               rows="6" maxlength="2000"
                               placeholder="Describe the item — fabric, fit, condition, sizing notes..."><?= e($description) ?></textarea>
-                    <small style="color:var(--text-secondary);font-size:12px;">
+                    <small class="admin-form-hint">
                         <span id="desc-count"><?= strlen($description) ?></span> / 2000
                     </small>
                 </div>
 
                 <div class="form-group">
-                    <label for="category_id">Category <span style="color:#dc2626">*</span></label>
+                    <label for="category_id">Category <span class="admin-required">*</span></label>
                     <select id="category_id" name="category_id" required>
                         <option value="">-- Select category --</option>
                         <?php foreach ($categories as $cat): ?>
@@ -116,7 +116,7 @@ include __DIR__ . '/inc_admin_layout.php';
                         <?php endforeach; ?>
                     </select>
                     <?php if (empty($categories)): ?>
-                        <small style="color:#f59e0b;font-size:12px;">
+                        <small class="admin-form-hint admin-form-hint-warning">
                             No categories yet. <a href="<?= BASE_URL ?>/admin/categories.php">Add one first.</a>
                         </small>
                     <?php endif; ?>
@@ -124,14 +124,14 @@ include __DIR__ . '/inc_admin_layout.php';
 
                 <div class="admin-two-col">
                     <div class="form-group">
-                        <label for="price">Price (<?= CURRENCY_SYMBOL ?>) <span style="color:#dc2626">*</span></label>
+                        <label for="price">Price (<?= CURRENCY_SYMBOL ?>) <span class="admin-required">*</span></label>
                         <input type="number" id="price" name="price"
                                value="<?= e($price) ?>"
                                min="0.01" step="0.01" inputmode="decimal" required
                                placeholder="0.00">
                     </div>
                     <div class="form-group">
-                        <label for="quantity">Stock Quantity <span style="color:#dc2626">*</span></label>
+                        <label for="quantity">Stock Quantity <span class="admin-required">*</span></label>
                         <input type="number" id="quantity" name="quantity"
                                value="<?= e($quantity) ?>"
                                min="0" step="1" inputmode="numeric" required
@@ -140,13 +140,10 @@ include __DIR__ . '/inc_admin_layout.php';
                 </div>
 
                 <div class="admin-product-add-actions">
-                    <button type="submit" class="btn primary" style="flex:1;">
+                    <button type="submit" class="btn primary admin-btn-flex">
                         Add Product &amp; Edit Images
                     </button>
-                    <button type="button" class="btn secondary" style="flex:1;" onclick="
-                        document.getElementById('addAnotherFlag').value='1';
-                        document.getElementById('addProductForm').submit();
-                    ">
+                    <button type="button" class="btn secondary admin-btn-flex" id="addAnotherBtn">
                         Add &amp; Add Another
                     </button>
                 </div>
@@ -189,14 +186,14 @@ include __DIR__ . '/inc_admin_layout.php';
         </div>
 
         <?php if (!empty($categories)): ?>
-        <div class="admin-card" style="margin-top:16px;">
+        <div class="admin-card admin-card-spaced-top">
             <div class="admin-card-head">
                 <h2 class="admin-card-title">Categories</h2>
                 <a href="<?= BASE_URL ?>/admin/categories.php" class="admin-card-link">Manage</a>
             </div>
-            <div class="admin-card-body" style="padding:0;">
+            <div class="admin-card-body admin-card-body-flush">
                 <?php foreach ($categories as $cat): ?>
-                    <div style="padding:8px 16px;border-bottom:1px solid #f5f5f7;font-size:13px;color:var(--text-secondary);">
+                    <div class="admin-category-list-item">
                         <?= e($cat['name']) ?>
                     </div>
                 <?php endforeach; ?>
@@ -211,10 +208,21 @@ include __DIR__ . '/inc_admin_layout.php';
 (function () {
     var ta = document.getElementById('description');
     var counter = document.getElementById('desc-count');
-    if (!ta || !counter) return;
-    ta.addEventListener('input', function () {
-        counter.textContent = ta.value.length;
-    });
+    if (ta && counter) {
+        ta.addEventListener('input', function () {
+            counter.textContent = ta.value.length;
+        });
+    }
+
+    var addAnotherBtn = document.getElementById('addAnotherBtn');
+    var addAnotherFlag = document.getElementById('addAnotherFlag');
+    var form = document.getElementById('addProductForm');
+    if (addAnotherBtn && addAnotherFlag && form) {
+        addAnotherBtn.addEventListener('click', function () {
+            addAnotherFlag.value = '1';
+            form.submit();
+        });
+    }
 })();
 </script>
 

@@ -19,9 +19,14 @@ if (!in_array($role, $allowedRoles, true)) {
 
 $pdo = get_pdo();
 
-// Summary counts
-$total_customers = (int)$pdo->query("SELECT COUNT(*) FROM Users WHERE role = 'customer'")->fetchColumn();
-$total_admins    = (int)$pdo->query("SELECT COUNT(*) FROM Users WHERE role = 'admin'")->fetchColumn();
+// Summary counts — one query instead of two
+$role_counts = ['customer' => 0, 'admin' => 0];
+$rc_stmt = $pdo->query("SELECT role, COUNT(*) as cnt FROM Users WHERE role IN ('customer','admin') GROUP BY role");
+foreach ($rc_stmt->fetchAll() as $row) {
+    $role_counts[$row['role']] = (int)$row['cnt'];
+}
+$total_customers = $role_counts['customer'];
+$total_admins    = $role_counts['admin'];
 $total_all       = $total_customers + $total_admins;
 
 // Build WHERE

@@ -72,7 +72,7 @@ include __DIR__ . '/inc_admin_layout.php';
         <option value="approved" <?= $status === 'approved' ? 'selected' : '' ?>>Approved</option>
         <option value="rejected" <?= $status === 'rejected' ? 'selected' : '' ?>>Rejected</option>
     </select>
-    <input type="text" name="search" value="<?= e($search) ?>" placeholder="Search by product, user, title..." class="admin-products-filter-select" style="min-width: 280px;">
+    <input type="text" name="search" value="<?= e($search) ?>" placeholder="Search by product, user, title..." class="admin-products-filter-select admin-search-input-wide">
     <button class="btn admin-mini-btn" type="submit">Filter</button>
     <a class="btn admin-mini-btn" href="<?= BASE_URL ?>/admin/reviews.php">Reset</a>
 </form>
@@ -118,13 +118,13 @@ include __DIR__ . '/inc_admin_layout.php';
                         <td><?= e(ucfirst((string)$r['status'])) ?></td>
                         <td><?= date('M d, Y', strtotime((string)$r['created_at'])) ?></td>
                         <td>
-                            <form method="post" style="display:flex;gap:6px;flex-wrap:wrap;">
+                            <form method="post" class="admin-review-actions-form">
                                 <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
                                 <input type="hidden" name="review_id" value="<?= (int)$r['review_id'] ?>">
                                 <button class="btn admin-mini-btn" type="submit" name="moderation_action" value="approve">Approve</button>
                                 <button class="btn admin-mini-btn" type="submit" name="moderation_action" value="reject">Reject</button>
                                 <button class="btn admin-mini-btn" type="submit" name="moderation_action" value="pending">Pending</button>
-                                <button class="btn danger admin-mini-btn" type="submit" name="moderation_action" value="delete" onclick="return confirm('Delete this review?');">Delete</button>
+                                <button class="btn danger admin-mini-btn admin-confirm-delete-btn" type="submit" name="moderation_action" value="delete">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -145,4 +145,4 @@ include __DIR__ . '/inc_admin_layout.php';
 
 </div>
 
-<?php include __DIR__ . '/inc_admin_layout_end.php';
+<?php include __DIR__ . '/inc_admin_layout_end.php'; ?>

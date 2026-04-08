@@ -24,12 +24,13 @@ if ($user_id > 0 && !$filtered_user) {
     $user_id = 0;
 }
 
-// Status summary counts for the header bar
-$counts = [];
-foreach ($allowedStatuses as $s) {
-    $c = $pdo->prepare('SELECT COUNT(*) FROM Orders WHERE status = ?');
-    $c->execute([$s]);
-    $counts[$s] = (int)$c->fetchColumn();
+// Status summary counts — one query with GROUP BY instead of 5 separate queries
+$counts = array_fill_keys($allowedStatuses, 0);
+$count_stmt = $pdo->query('SELECT status, COUNT(*) as cnt FROM Orders GROUP BY status');
+foreach ($count_stmt->fetchAll() as $row) {
+    if (isset($counts[$row['status']])) {
+        $counts[$row['status']] = (int)$row['cnt'];
+    }
 }
 $counts['all'] = array_sum($counts);
 

@@ -2881,3 +2881,55 @@
     font-size: 12px;
     color: #9ca3af;
 }
+
+/* ===== PRODUCT ADD PAGE ===== */
+.admin-btn-flex {
+    flex: 1;
+}
+
+.admin-form-hint {
+    display: block;
+    font-size: 12px;
+    color: var(--admin-text-secondary, #6b7280);
+    margin-top: 4px;
+}
+
+.admin-form-hint-warning {
+    color: #b45309;
+}
+
+.admin-card-spaced-top {
+    margin-top: 16px;
+}
+
+.admin-category-list-item {
+    padding: 8px 16px;
+    border-bottom: 1px solid #f5f5f7;
+    font-size: 13px;
+    color: var(--admin-text-secondary, #6b7280);
+}
+
+.admin-category-list-item:last-child {
+    border-bottom: none;
+}
+
+/* ===== INLINE FORM UTILITY ===== */
+.admin-inline-form {
+    display: inline;
+}
+
+/* ===== TAB BAR SPACING ===== */
+.admin-tab-bar-spaced {
+    margin-bottom: 20px;
+}
+
+/* ===== REVIEWS PAGE ===== */
+.admin-review-actions-form {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.admin-search-input-wide {
+    min-width: 280px;
+}

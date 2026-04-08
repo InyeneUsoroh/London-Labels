@@ -58,10 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Email customer if anything changed
             if ($customer && ($new_status !== $prev_status || $new_payment !== $prev_payment)) {
+                $customer_name = trim(($customer['first_name'] ?? '') . ' ' . ($customer['last_name'] ?? ''));
+                if ($customer_name === '') $customer_name = $customer['username'];
                 $mailError = null;
                 send_order_status_update_email(
                     $customer['email'],
-                    $customer['username'],
+                    $customer_name,
                     $order_id,
                     $new_status,
                     $new_payment,
@@ -90,9 +92,6 @@ $s_class = match($status_value) {
 $p_class = $payment_status_value === 'paid'
     ? 'completed'
     : ($payment_status_value === 'failed' ? 'cancelled' : 'pending');
-
-// Order total from items (more accurate than stored total)
-$items_total = array_sum(array_map(fn($i) => $i['price'] * $i['quantity'], $items));
 
 include __DIR__ . '/inc_admin_layout.php';
 ?>

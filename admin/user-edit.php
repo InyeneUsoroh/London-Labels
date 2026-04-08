@@ -70,10 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Load their recent orders
-$user_orders = get_user_orders($user_id, 10, 0);
-$user_order_count_stmt = get_pdo()->prepare('SELECT COUNT(*) FROM Orders WHERE user_id = ?');
-$user_order_count_stmt->execute([$user_id]);
-$user_order_total = (int)$user_order_count_stmt->fetchColumn();
+$user_orders      = get_user_orders($user_id, 10, 0);
+$user_order_total = count_user_orders($user_id);
 
 include __DIR__ . '/inc_admin_layout.php';
 ?>
@@ -111,8 +109,6 @@ include __DIR__ . '/inc_admin_layout.php';
     <!-- Left: edit form -->
     <div>
         <div class="admin-card admin-card-gap-bottom-20">
-
-</div>
             <div class="admin-card-head">
                 <h2 class="admin-card-title">Account Details</h2>
             </div>

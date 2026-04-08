@@ -101,7 +101,8 @@ include __DIR__ . '/inc_admin_layout.php';
             <p class="admin-stat-sub"><?= $pending_orders ?> pending</p>
         <?php endif; ?>
     </div>
-    <div class="admin-stat-card tone-green <?= ($count_low_stock = count($low_stock)) > 0 || $products_below_image_min > 0 ? '' : 'admin-stat-card-compact' ?>">
+    <?php $count_low_stock = count($low_stock); ?>
+    <div class="admin-stat-card tone-green <?= $count_low_stock > 0 || $products_below_image_min > 0 ? '' : 'admin-stat-card-compact' ?>">
         <p class="admin-stat-label">Products</p>
         <p class="admin-stat-value"><?= number_format($total_products) ?></p>
         <?php if ($count_low_stock > 0): ?>
@@ -265,8 +266,8 @@ include __DIR__ . '/inc_admin_layout.php';
             <?php
                 $dash_unread = count_contact_messages('unread');
             ?>
-            <a href="<?= BASE_URL ?>/admin/messages.php?status=unread" class="btn" style="position:relative;">
-                Messages<?php if ($dash_unread > 0): ?> <span style="display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;background:#e8357e;color:#fff;font-size:10px;font-weight:700;border-radius:999px;margin-left:4px;"><?= $dash_unread ?></span><?php endif; ?>
+            <a href="<?= BASE_URL ?>/admin/messages.php?status=unread" class="btn">
+                Messages<?php if ($dash_unread > 0): ?> <span class="admin-nav-badge"><?= $dash_unread ?></span><?php endif; ?>
             </a>
         </div>
     </div>

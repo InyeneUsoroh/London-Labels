@@ -33,6 +33,26 @@
         if (e.key === 'Escape') closeSidebar();
     });
 })();
+
+// Confirm-delete: any form with class admin-confirm-delete-form,
+// or any button with class admin-confirm-delete-btn
+(function () {
+    document.addEventListener('submit', function (e) {
+        var form = e.target;
+        if (!form.classList.contains('admin-confirm-delete-form')) return;
+        if (!confirm('Delete permanently? This cannot be undone.')) {
+            e.preventDefault();
+        }
+    });
+
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.admin-confirm-delete-btn');
+        if (!btn) return;
+        if (!confirm('Delete permanently? This cannot be undone.')) {
+            e.preventDefault();
+        }
+    });
+})();
 </script>
 </body>
 </html>

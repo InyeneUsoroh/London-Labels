@@ -29,8 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Delete physical images first
     $images = get_product_images($product_id);
     foreach ($images as $img) {
-        $path = rtrim(UPLOAD_DIR, '/') . '/products/' . basename($img['image_url']);
-        if (is_file($path)) @unlink($path);
+        $path = get_local_upload_file_path_from_url((string)($img['image_url'] ?? ''));
+        if ($path !== null && is_file($path)) {
+            @unlink($path);
+        }
     }
 
     delete_product($product_id);

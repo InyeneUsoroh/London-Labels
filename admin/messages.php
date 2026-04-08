@@ -63,16 +63,16 @@ include __DIR__ . '/inc_admin_layout.php';
 
 <?php if ($errors): ?>
     <div class="admin-alert admin-alert-danger" role="alert">
-        <?php foreach ($errors as $e): ?><p><?= htmlspecialchars($e, ENT_QUOTES) ?></p><?php endforeach; ?>
+        <?php foreach ($errors as $err): ?><p><?= e($err) ?></p><?php endforeach; ?>
     </div>
 <?php endif; ?>
 
 <?php if ($notice !== ''): ?>
-    <div class="admin-alert admin-alert-success" role="status"><p><?= htmlspecialchars($notice, ENT_QUOTES) ?></p></div>
+    <div class="admin-alert admin-alert-success" role="status"><p><?= e($notice) ?></p></div>
 <?php endif; ?>
 
 <!-- Filter tabs -->
-<div class="admin-tab-bar" style="margin-bottom: 20px;">
+<div class="admin-tab-bar admin-tab-bar-spaced">
     <a href="<?= BASE_URL ?>/admin/messages.php" class="admin-tab-link <?= $status_filter === '' ? 'active' : '' ?>">
         All <span class="admin-tab-count"><?= number_format(count_contact_messages()) ?></span>
     </a>
@@ -100,7 +100,7 @@ include __DIR__ . '/inc_admin_layout.php';
             <div class="admin-message-card <?= $is_unread ? 'admin-message-unread' : '' ?>">
                 <div class="admin-message-meta">
                     <div class="admin-message-sender">
-                        <span class="admin-message-name"><?= htmlspecialchars($msg['name'], ENT_QUOTES) ?></span>
+                        <span class="admin-message-name"><?= e($msg['name']) ?></span>
                         <?php if ($is_unread): ?>
                             <span class="admin-message-badge">New</span>
                         <?php endif; ?>
@@ -112,22 +112,20 @@ include __DIR__ . '/inc_admin_layout.php';
                 </div>
 
                 <div class="admin-message-contact">
-                    <a href="mailto:<?= htmlspecialchars($msg['email'], ENT_QUOTES) ?>?subject=Re%3A%20<?= rawurlencode($msg['subject']) ?>" class="admin-message-email">
-                        <?= htmlspecialchars($msg['email'], ENT_QUOTES) ?>
+                    <a href="mailto:<?= e($msg['email']) ?>?subject=Re%3A%20<?= rawurlencode($msg['subject']) ?>" class="admin-message-email">
+                        <?= e($msg['email']) ?>
                     </a>
-                    <span class="admin-message-subject-tag"><?= htmlspecialchars($msg['subject'], ENT_QUOTES) ?></span>
+                    <span class="admin-message-subject-tag"><?= e($msg['subject']) ?></span>
                 </div>
 
-                <p class="admin-message-body"><?= nl2br(htmlspecialchars($msg['message'], ENT_QUOTES)) ?></p>
+                <p class="admin-message-body"><?= nl2br(e($msg['message'])) ?></p>
 
                 <div class="admin-message-actions">
-                    <!-- Reply -->
-                    <a href="mailto:<?= htmlspecialchars($msg['email'], ENT_QUOTES) ?>?subject=Re%3A%20<?= rawurlencode($msg['subject']) ?>" class="btn admin-mini-btn">
+                    <a href="mailto:<?= e($msg['email']) ?>?subject=Re%3A%20<?= rawurlencode($msg['subject']) ?>" class="btn admin-mini-btn">
                         Reply
                     </a>
 
-                    <!-- Mark read/unread -->
-                    <form method="post" style="display:inline;">
+                    <form method="post" class="admin-inline-form">
                         <input type="hidden" name="csrf"   value="<?= csrf_token() ?>">
                         <input type="hidden" name="msg_id" value="<?= (int)$msg['id'] ?>">
                         <input type="hidden" name="action" value="<?= $is_unread ? 'mark_read' : 'mark_unread' ?>">
@@ -136,9 +134,8 @@ include __DIR__ . '/inc_admin_layout.php';
                         </button>
                     </form>
 
-                    <!-- Archive (only if not already archived) -->
                     <?php if (($msg['status'] ?? '') !== 'archived'): ?>
-                        <form method="post" style="display:inline;">
+                        <form method="post" class="admin-inline-form">
                             <input type="hidden" name="csrf"   value="<?= csrf_token() ?>">
                             <input type="hidden" name="msg_id" value="<?= (int)$msg['id'] ?>">
                             <input type="hidden" name="action" value="archive">
@@ -146,8 +143,7 @@ include __DIR__ . '/inc_admin_layout.php';
                         </form>
                     <?php endif; ?>
 
-                    <!-- Delete -->
-                    <form method="post" style="display:inline;" onsubmit="return confirm('Delete this message permanently?');">
+                    <form method="post" class="admin-inline-form admin-confirm-delete-form">
                         <input type="hidden" name="csrf"   value="<?= csrf_token() ?>">
                         <input type="hidden" name="msg_id" value="<?= (int)$msg['id'] ?>">
                         <input type="hidden" name="action" value="delete">
