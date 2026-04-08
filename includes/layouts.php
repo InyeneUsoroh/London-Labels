@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * London Labels - Layout Helpers
  * Common layout functions for consistent page structure

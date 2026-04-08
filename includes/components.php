@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * London Labels - Reusable UI Components
  * Component rendering functions for consistent UI
