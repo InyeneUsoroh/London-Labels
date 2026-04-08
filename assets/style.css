@@ -3413,7 +3413,7 @@ input:focus-visible:not(.nav-search-form input):not(.mob-search-bar input) {
 
 @media (min-width: 769px) {
     .product-purchase-actions {
-        max-width: 400px;
+        max-width: 100%;
     }
 }
 
@@ -9716,11 +9716,40 @@ body.review-lightbox-open {
             "side"
             "support";
         gap: 24px;
-        padding: 20px 20px 48px;
+        padding: 20px 16px 48px;
     }
 
     .product-breadcrumb {
-        padding: 14px 20px 0;
+        padding: 14px 16px 0;
+    }
+
+    /* Gallery: thumbnails move below main image on mobile */
+    .product-detail-layout > div:first-child {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .product-gallery-wrap {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* Thumbnail strip becomes a horizontal row */
+    .product-thumb-grid {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        gap: 8px;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        padding-bottom: 4px;
+    }
+
+    .product-thumb-btn {
+        width: 64px;
+        min-width: 64px;
+        height: 64px;
+        flex-shrink: 0;
     }
 
     body.product-page-has-buybar {
@@ -9847,6 +9876,32 @@ body.review-lightbox-open {
     .product-detail-login {
         padding: 11px 16px;
         font-size: 15px;
+    }
+
+    /* Stepper touch targets */
+    .qty-stepper {
+        height: 48px;
+    }
+
+    .qty-stepper-btn {
+        width: 48px;
+        font-size: 20px;
+    }
+
+    /* Size buttons — larger touch targets */
+    .product-size-btn {
+        min-width: 52px;
+        height: 44px;
+        font-size: 13px;
+    }
+
+    /* Secondary actions full width */
+    .product-secondary-actions {
+        width: 100%;
+    }
+
+    .product-action-secondary-btn {
+        height: 44px;
     }
 
     .related-products-section {
