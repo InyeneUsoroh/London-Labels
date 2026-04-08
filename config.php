@@ -3,6 +3,8 @@
  * London Labels E-Commerce Application
  * Configuration File
  */
+if (defined('CONFIG_LOADED')) return;
+define('CONFIG_LOADED', true);
 
 // ===== DATABASE CONFIGURATION =====
 define('DB_HOST', getenv('DB_HOST') ?: '127.0.0.1');
