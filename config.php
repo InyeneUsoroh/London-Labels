@@ -7,10 +7,11 @@ if (defined('CONFIG_LOADED')) return;
 define('CONFIG_LOADED', true);
 
 // ===== DATABASE CONFIGURATION =====
-define('DB_HOST', getenv('DB_HOST') ?: '127.0.0.1');
-define('DB_NAME', getenv('DB_NAME') ?: 'londonlabels');
-define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') ?: ''); 
+define('DB_HOST', getenv('MYSQLHOST') ?: (getenv('DB_HOST') ?: '127.0.0.1'));
+define('DB_PORT', getenv('MYSQLPORT') ?: (getenv('DB_PORT') ?: '3306'));
+define('DB_NAME', getenv('MYSQLDATABASE') ?: (getenv('DB_NAME') ?: 'londonlabels'));
+define('DB_USER', getenv('MYSQLUSER') ?: (getenv('DB_USER') ?: 'root'));
+define('DB_PASS', getenv('MYSQLPASSWORD') ?: (getenv('DB_PASS') ?: '')); 
 
 // Base URL for the application
 // Priority:
