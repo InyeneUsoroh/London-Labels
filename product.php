@@ -539,9 +539,7 @@ if (!empty($product)): ?>
                         <?php if ($mainImage !== ''): ?>
                             <img src="<?= e($mainImage) ?>" alt="<?= e($product['name']) ?>" class="product-main-image" id="productMainImage" loading="eager" fetchpriority="high" decoding="async" width="1200" height="1200">
                         <?php else: ?>
-                            <div class="product-gallery-empty" role="img" aria-label="No product image uploaded yet">
-                                <span>No product image uploaded yet</span>
-                            </div>
+                            <img src="<?= BASE_URL ?>/assets/images/placeholder.png" alt="<?= e($product['name']) ?>" class="product-main-image" id="productMainImage" loading="eager" decoding="async" width="1200" height="1200">
                         <?php endif; ?>
 
                         <?php if ($has_gallery_navigation): ?>
