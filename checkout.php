@@ -75,11 +75,7 @@ foreach ($_SESSION['cart'] as $product_id => $qty) {
     }
 
     $item_price = (float)$product['price'];
-    if ($variant_id > 0) {
-        $v = get_variant_by_id($variant_id);
-        if ($v) $item_price += (float)$v['price_modifier'];
-    }
-
+    // Unified Pricing: ignoring variant modifiers in checkout
     $line         = $item_price * $qty;
     $cart_items[] = [
         'product_id' => (int)$product_id,

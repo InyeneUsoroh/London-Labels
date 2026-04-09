@@ -84,11 +84,7 @@ if (isset($_POST['ajax_update_qty'])) {
         $p = get_product_by_id((int)$pid);
         if ($p) {
             $item_price = (float)$p['price'];
-            $vid = (int)($_SESSION['cart_variant_ids'][$pid] ?? 0);
-            if ($vid > 0) {
-                $v = get_variant_by_id($vid);
-                if ($v) $item_price += (float)$v['price_modifier'];
-            }
+            // Skip variant modifiers to maintain unified pricing standards
             $subtotal += $item_price * $q;
         }
     }
@@ -163,12 +159,7 @@ if (!empty($_SESSION['cart'])) {
             }
 
             $item_price = (float)$product['price'];
-            $vid = (int)($_SESSION['cart_variant_ids'][$product_id] ?? 0);
-            if ($vid > 0) {
-                $v = get_variant_by_id($vid);
-                if ($v) $item_price += (float)$v['price_modifier'];
-            }
-
+            // Skip variant modifiers to maintain unified pricing standards
             $line = $item_price * $qty;
             $size = $_SESSION['cart_variants'][$product_id] ?? null;
             $cart_items[] = [

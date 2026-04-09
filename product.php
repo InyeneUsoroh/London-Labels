@@ -1327,7 +1327,10 @@ if (!empty($product)): ?>
 
         function formatCurrency(amount) {
             var symbol = window.LND_CURRENCY_SYMBOL || '₦';
-            return symbol + amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            // Match PHP format_price(): comma separator, 2 decimal places
+            var parts = amount.toFixed(2).split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return symbol + parts.join('.');
         }
 
         var priceDisplay = document.getElementById('product-base-price');
@@ -1346,9 +1349,9 @@ if (!empty($product)): ?>
             if (sizeLabelInput) sizeLabelInput.value = size;
             if (selectedText)   selectedText.textContent = size;
 
-            // Update price
+            // Update price (removed variant modifier to maintain unified pricing standards)
             if (priceDisplay) {
-                priceDisplay.textContent = formatCurrency(basePrice + mod);
+                priceDisplay.textContent = formatCurrency(basePrice);
             }
 
             if (qtyInput) {
