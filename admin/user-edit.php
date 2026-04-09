@@ -22,6 +22,12 @@ if (!$user) {
     exit;
 }
 
+// Security: Regular admins cannot edit Super Admins
+if (($user['role'] ?? '') === 'super_admin' && !is_super_admin()) {
+    header('Location: ' . BASE_URL . '/admin/users.php?error=unauthorized');
+    exit;
+}
+
 // Handle POST — update account details
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verify_csrf($_POST['csrf'] ?? '')) {
@@ -36,7 +42,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($new_username === '')                              $errors[] = 'Username is required.';
         if (!filter_var($new_email, FILTER_VALIDATE_EMAIL))   $errors[] = 'A valid email address is required.';
-        if (!in_array($new_role, ['admin', 'customer'], true)) $errors[] = 'Invalid role.';
+        
+        $allowed_roles = ['customer', 'admin', 'super_admin'];
+        if (!in_array($new_role, $allowed_roles, true)) $errors[] = 'Invalid role.';
+
+        // Restriction: Only Super Admins can promote/demote admins or change roles at all
+        if ($new_role !== $user['role'] && !is_super_admin()) {
+            $errors[] = 'You do not have permission to change user roles.';
+        }
 
         // Check username/email uniqueness (exclude current user)
         if (empty($errors)) {
@@ -154,13 +167,21 @@ include __DIR__ . '/inc_admin_layout.php';
 
                     <div class="form-group">
                         <label for="role">Role <span class="admin-required">*</span></label>
-                        <select id="role" name="role" <?= $user_id === (int)current_user_id() ? 'disabled' : '' ?>>
+                        <?php 
+                            $can_change_role = is_super_admin() && $user_id !== (int)current_user_id();
+                        ?>
+                        <select id="role" name="role" <?= !$can_change_role ? 'disabled' : '' ?>>
                             <option value="customer" <?= ($user['role'] ?? '') === 'customer' ? 'selected' : '' ?>>Customer</option>
                             <option value="admin"    <?= ($user['role'] ?? '') === 'admin'    ? 'selected' : '' ?>>Admin</option>
+                            <option value="super_admin" <?= ($user['role'] ?? '') === 'super_admin' ? 'selected' : '' ?>>Super Admin</option>
                         </select>
-                        <?php if ($user_id === (int)current_user_id()): ?>
+                        <?php if (!$can_change_role): ?>
                             <input type="hidden" name="role" value="<?= e($user['role']) ?>">
-                            <small class="admin-text-small-secondary">You cannot change your own role.</small>
+                            <?php if ($user_id === (int)current_user_id()): ?>
+                                <small class="admin-text-small-secondary">You cannot change your own role.</small>
+                            <?php else: ?>
+                                <small class="admin-text-small-secondary">Only a Super Admin can change roles.</small>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
 

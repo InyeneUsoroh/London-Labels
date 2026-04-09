@@ -19,15 +19,16 @@ if (!in_array($role, $allowedRoles, true)) {
 
 $pdo = get_pdo();
 
-// Summary counts — one query instead of two
-$role_counts = ['customer' => 0, 'admin' => 0];
-$rc_stmt = $pdo->query("SELECT role, COUNT(*) as cnt FROM Users WHERE role IN ('customer','admin') GROUP BY role");
+// Summary counts
+$role_counts = ['customer' => 0, 'admin' => 0, 'super_admin' => 0];
+$rc_stmt = $pdo->query("SELECT role, COUNT(*) as cnt FROM Users WHERE role IN ('customer','admin','super_admin') GROUP BY role");
 foreach ($rc_stmt->fetchAll() as $row) {
     $role_counts[$row['role']] = (int)$row['cnt'];
 }
-$total_customers = $role_counts['customer'];
-$total_admins    = $role_counts['admin'];
-$total_all       = $total_customers + $total_admins;
+$total_customers    = $role_counts['customer'];
+$total_admins       = $role_counts['admin'];
+$total_super_admins = $role_counts['super_admin'];
+$total_all          = $total_customers + $total_admins + $total_super_admins;
 
 // Build WHERE
 $where  = ["u.role != 'deleted'"];
@@ -85,6 +86,9 @@ include __DIR__ . '/inc_admin_layout.php';
             <?= number_format($total_all) ?> total &middot;
             <?= number_format($total_customers) ?> customers &middot;
             <?= number_format($total_admins) ?> admins
+            <?php if ($total_super_admins > 0): ?>
+                &middot; <?= number_format($total_super_admins) ?> super admins
+            <?php endif; ?>
         </p>
     </div>
 </div>
@@ -107,6 +111,11 @@ include __DIR__ . '/inc_admin_layout.php';
        class="admin-order-summary-item <?= $role === 'admin' ? 'active' : '' ?> tone-magenta">
         <span class="admin-order-summary-count"><?= number_format($total_admins) ?></span>
         <span class="admin-order-summary-label">Admins</span>
+    </a>
+    <a href="<?= BASE_URL ?>/admin/users.php?role=super_admin<?= $search ? '&q=' . urlencode($search) : '' ?>"
+       class="admin-order-summary-item <?= $role === 'super_admin' ? 'active' : '' ?> tone-gold">
+        <span class="admin-order-summary-count"><?= number_format($total_super_admins) ?></span>
+        <span class="admin-order-summary-label">Owner</span>
     </a>
 </div>
 
@@ -165,9 +174,13 @@ include __DIR__ . '/inc_admin_layout.php';
                     </td>
                     <td><?= e($u['email']) ?></td>
                     <td>
-                        <span class="admin-status-pill <?= $u['role'] === 'admin' ? 'completed' : 'processing' ?>">
-                            <?= ucfirst($u['role']) ?>
-                        </span>
+                        <?php if ($u['role'] === 'super_admin'): ?>
+                            <span class="admin-status-pill tone-gold">Super Admin</span>
+                        <?php else: ?>
+                            <span class="admin-status-pill <?= $u['role'] === 'admin' ? 'completed' : 'processing' ?>">
+                                <?= ucfirst($u['role']) ?>
+                            </span>
+                        <?php endif; ?>
                     </td>
                     <td>
                         <?php if ($u['order_count'] > 0): ?>

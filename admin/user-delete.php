@@ -20,6 +20,12 @@ if (!$user) {
     exit;
 }
 
+// Security: Prevent deleting a Super Admin or unauthorized deletion
+if ($user['role'] === 'super_admin' && !is_super_admin()) {
+    header('Location: ' . BASE_URL . '/admin/users.php?error=unauthorized');
+    exit;
+}
+
 // Require POST + CSRF for actual deletion
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verify_csrf($_POST['csrf'] ?? '')) {

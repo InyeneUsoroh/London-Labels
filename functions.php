@@ -512,8 +512,12 @@ function order_progress_steps(string $status): array {
 // ===== ADMIN CHECK =====
 if (!function_exists('is_admin')) {
     function is_admin(): bool {
-        return !empty($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
+        return !empty($_SESSION['user_role']) && in_array($_SESSION['user_role'], ['admin', 'super_admin'], true);
     }
+}
+
+function is_super_admin(): bool {
+    return !empty($_SESSION['user_role']) && $_SESSION['user_role'] === 'super_admin';
 }
 
 function is_logged_in(): bool {
