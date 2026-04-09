@@ -586,4 +586,102 @@ document.addEventListener('DOMContentLoaded', () => {
     initWishlistToggles();
     initQuickShare();
     initAddToCartAjax();
+    initCartActions();
 });
+
+function initCartActions() {
+    // 1. AJAX Quantity Autosave
+    const qtyInputs = document.querySelectorAll('.cart-qty-input');
+    qtyInputs.forEach(input => {
+        let timeout = null;
+        input.addEventListener('input', function() {
+            clearTimeout(timeout);
+            const statusNode = this.parentElement.querySelector('.cart-qty-saving');
+            if (statusNode) statusNode.classList.remove('visually-hidden');
+
+            timeout = setTimeout(async () => {
+                const productId = this.dataset.productId;
+                const qty = this.value;
+                const csrf = this.dataset.csrf;
+
+                try {
+                    const body = new URLSearchParams({
+                        ajax_update_qty: '1',
+                        product_id: productId,
+                        qty: qty,
+                        csrf: csrf
+                    });
+                    const res = await fetch((window.BASE_URL || '') + '/cart.php', {
+                        method: 'POST',
+                        body: body
+                    });
+                    const data = await res.json();
+                    
+                    if (data.ok) {
+                        const subtotalEl = document.getElementById('cart-subtotal-val');
+                        const totalEl    = document.getElementById('cart-total-val');
+                        if (subtotalEl) subtotalEl.textContent = data.subtotal;
+                        if (totalEl)    totalEl.textContent    = data.subtotal;
+                        updateHeaderCartBadge(data.count);
+                    }
+                } catch (e) {
+                    console.error('Cart update failed:', e);
+                } finally {
+                    if (statusNode) statusNode.classList.add('visually-hidden');
+                }
+            }, 600);
+        });
+    });
+
+    // 2. AJAX Item Removal with Animation
+    document.addEventListener('click', async function(e) {
+        const btn = e.target.closest('.cart-remove-btn');
+        if (!btn) return;
+
+        const productId = btn.dataset.productId;
+        const csrf = btn.dataset.csrf;
+        const row = btn.closest('.cart-item');
+
+        if (!productId || !csrf || !row) return;
+
+        if (btn.classList.contains('is-loading')) return;
+        btn.classList.add('is-loading');
+
+        try {
+            const body = new URLSearchParams({
+                action: 'remove',
+                product_id: productId,
+                csrf: csrf,
+                ajax: '1'
+            });
+            const res = await fetch((window.BASE_URL || '') + '/cart.php', {
+                method: 'POST',
+                body: body
+            });
+            const data = await res.json();
+
+            if (data.ok) {
+                row.style.transition = 'opacity 0.4s, transform 0.4s';
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(20px)';
+                
+                setTimeout(() => {
+                    row.remove();
+                    const subtotalEl = document.getElementById('cart-subtotal-val');
+                    const totalEl    = document.getElementById('cart-total-val');
+                    if (subtotalEl) subtotalEl.textContent = data.subtotal;
+                    if (totalEl)    totalEl.textContent    = data.subtotal;
+                    updateHeaderCartBadge(data.count);
+
+                    // If empty, reload to show empty state
+                    if (parseInt(data.count, 10) === 0) {
+                        window.location.reload();
+                    }
+                }, 400);
+            }
+        } catch (e) {
+            console.error('Cart removal failed:', e);
+            btn.classList.remove('is-loading');
+        }
+    });
+}

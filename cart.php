@@ -129,6 +129,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 unset($_SESSION['cart'][$product_id]);
                 unset($_SESSION['cart_variants'][$product_id]);
                 unset($_SESSION['cart_variant_ids'][$product_id]);
+
+                // Handle AJAX response
+                if (isset($_POST['ajax'])) {
+                    header('Content-Type: application/json');
+                    $new_subtotal = 0;
+                    foreach ($_SESSION['cart'] ?? [] as $pid => $q) {
+                        $p = get_product_by_id((int)$pid);
+                        if ($p) $new_subtotal += (float)$p['price'] * $q;
+                    }
+                    echo json_encode([
+                        'ok' => true,
+                        'subtotal' => format_price($new_subtotal),
+                        'count' => array_sum($_SESSION['cart'] ?? [])
+                    ]);
+                    exit;
+                }
                 $notice = 'Item removed from cart.';
             }
         } elseif (isset($_POST['add_to_cart']) || $action === 'add_to_cart') {
