@@ -220,7 +220,7 @@ $setup_complete     = $setup_has_image && $setup_has_variants && $setup_has_desc
 
                     <div class="admin-two-col">
                         <div class="form-group">
-                            <label for="price">Price (<?= CURRENCY_SYMBOL ?>) <span class="admin-required">*</span></label>
+                            <label for="price">Price <span class="admin-required">*</span></label>
                             <input type="number" id="price" name="price"
                                    value="<?= $price ?>"
                                    min="0.01" step="0.01" inputmode="decimal" required>
