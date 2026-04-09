@@ -587,7 +587,29 @@ document.addEventListener('DOMContentLoaded', () => {
     initQuickShare();
     initAddToCartAjax();
     initCartActions();
+
+    // Sync cart badge on back-button/cache load (bfcache handling)
+    window.addEventListener('pageshow', function (event) {
+        // If event.persisted is true, the page was loaded from cache (e.g. back button)
+        // We always sync just to be safe.
+        syncCartBadge();
+    });
 });
+
+async function syncCartBadge() {
+    try {
+        const res = await fetch((window.BASE_URL || '') + '/api/cart-state.php', {
+            cache: 'no-store', // Don't cache the API response
+            credentials: 'same-origin'
+        });
+        const data = await res.json();
+        if (data.ok) {
+            updateHeaderCartBadge(data.count);
+        }
+    } catch (e) {
+        // Fail silently
+    }
+}
 
 function initCartActions() {
     // 1. AJAX Quantity Autosave
