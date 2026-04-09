@@ -71,7 +71,7 @@ $upload_script_version = is_file($upload_script_path) ? (string)filemtime($uploa
     <script>
         // Make BASE_URL and CURRENCY available to JavaScript
         window.BASE_URL = '<?= BASE_URL ?>';
-        window.CURRENCY_SYMBOL = '<?= addslashes(CURRENCY_SYMBOL) ?>';
+        window.LND_CURRENCY_SYMBOL = '<?= addslashes(LND_CURRENCY_SYMBOL) ?>';
     </script>
     <script src="<?= BASE_URL ?>/assets/hamburger-menu.js?v=<?= e($script_version) ?>" defer></script>
     <script src="<?= BASE_URL ?>/assets/upload-progress.js?v=<?= e($upload_script_version) ?>" defer></script>

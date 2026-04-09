@@ -270,7 +270,7 @@
                             appendHighlightedText(category, suggestion.category, searchTerm);
 
                             var price = document.createElement('span');
-                            price.textContent = <?= json_encode(CURRENCY_SYMBOL) ?> + suggestion.price;
+                            price.textContent = <?= json_encode(LND_CURRENCY_SYMBOL) ?> + suggestion.price;
 
                             meta.appendChild(category);
                             meta.appendChild(price);

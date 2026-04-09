@@ -1326,7 +1326,7 @@ if (!empty($product)): ?>
         var stockLabel = document.querySelector('.product-stock-label');
 
         function formatCurrency(amount) {
-            var symbol = window.CURRENCY_SYMBOL || '₦';
+            var symbol = window.LND_CURRENCY_SYMBOL || '₦';
             return symbol + amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 

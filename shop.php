@@ -185,12 +185,12 @@ include __DIR__ . '/inc_header.php';
                 <option value="in_stock" <?= $availability === 'in_stock' ? 'selected' : '' ?>>In stock only</option>
             </select>
 
-            <label for="min_price" class="shop-filter-label">Min price (<?= CURRENCY_SYMBOL ?>)</label>
+            <label for="min_price" class="shop-filter-label">Min price (<?= LND_CURRENCY_SYMBOL ?>)</label>
             <input type="number" id="min_price" name="min_price" min="0" step="1"
                    value="<?= $min_price !== null ? e((string)(int)$min_price) : '' ?>"
                    class="shop-filter-input" inputmode="numeric" placeholder="0">
 
-            <label for="max_price" class="shop-filter-label">Max price (<?= CURRENCY_SYMBOL ?>)</label>
+            <label for="max_price" class="shop-filter-label">Max price (<?= LND_CURRENCY_SYMBOL ?>)</label>
             <input type="number" id="max_price" name="max_price" min="0" step="1"
                    value="<?= $max_price !== null ? e((string)(int)$max_price) : '' ?>"
                    class="shop-filter-input" inputmode="numeric" placeholder="Any">
