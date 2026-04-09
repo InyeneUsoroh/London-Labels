@@ -74,13 +74,19 @@ foreach ($_SESSION['cart'] as $product_id => $qty) {
         continue;
     }
 
-    $line         = $product['price'] * $qty;
+    $item_price = (float)$product['price'];
+    if ($variant_id > 0) {
+        $v = get_variant_by_id($variant_id);
+        if ($v) $item_price += (float)$v['price_modifier'];
+    }
+
+    $line         = $item_price * $qty;
     $cart_items[] = [
         'product_id' => (int)$product_id,
         'variant_id' => $variant_id > 0 ? $variant_id : null,
         'size_label' => $size_label !== '' ? $size_label : null,
         'name'       => $product['name'],
-        'price'      => $product['price'],
+        'price'      => $item_price,
         'quantity'   => $qty,
         'subtotal'   => $line,
     ];

@@ -592,7 +592,7 @@ if (!empty($product)): ?>
                         <span class="product-review-count">No reviews yet <a href="#product-reviews" class="product-review-link">Be the first to review</a></span>
                     <?php endif; ?>
                 </div>
-                <div class="product-detail-price">
+                <div class="product-detail-price" id="product-base-price">
                     <?= format_price($product['price']) ?>
                 </div>
             </div>
@@ -1325,6 +1325,14 @@ if (!empty($product)): ?>
         var stockNote = document.getElementById('productStockNote');
         var stockLabel = document.querySelector('.product-stock-label');
 
+        function formatCurrency(amount) {
+            var symbol = window.CURRENCY_SYMBOL || '₦';
+            return symbol + amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        var priceDisplay = document.getElementById('product-base-price');
+        var basePrice = parseFloat("<?= (float)$product['price'] ?>");
+
         function applySizeSelection(btn) {
             sizeBtns.forEach(function (b) { b.classList.remove('selected'); });
             btn.classList.add('selected');
@@ -1332,10 +1340,17 @@ if (!empty($product)): ?>
             var vid  = btn.getAttribute('data-variant-id');
             var size = btn.getAttribute('data-size');
             var vqty = parseInt(btn.getAttribute('data-qty') || '0', 10) || 0;
+            var mod  = parseFloat(btn.getAttribute('data-price-mod') || '0');
 
             if (variantInput)   variantInput.value   = vid;
             if (sizeLabelInput) sizeLabelInput.value = size;
             if (selectedText)   selectedText.textContent = size;
+
+            // Update price
+            if (priceDisplay) {
+                priceDisplay.textContent = formatCurrency(basePrice + mod);
+            }
+
             if (qtyInput) {
                 qtyInput.max = String(Math.max(1, vqty));
                 if (parseInt(qtyInput.value || '1', 10) > vqty) {

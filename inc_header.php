@@ -69,8 +69,9 @@ $upload_script_version = is_file($upload_script_path) ? (string)filemtime($uploa
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/style.css?v=<?= e($style_version) ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/lightbox.css?v=<?= is_file(__DIR__ . '/assets/lightbox.css') ? (string)filemtime(__DIR__ . '/assets/lightbox.css') : '1' ?>">
     <script>
-        // Make BASE_URL available to JavaScript
+        // Make BASE_URL and CURRENCY available to JavaScript
         window.BASE_URL = '<?= BASE_URL ?>';
+        window.CURRENCY_SYMBOL = '<?= addslashes(CURRENCY_SYMBOL) ?>';
     </script>
     <script src="<?= BASE_URL ?>/assets/hamburger-menu.js?v=<?= e($script_version) ?>" defer></script>
     <script src="<?= BASE_URL ?>/assets/upload-progress.js?v=<?= e($upload_script_version) ?>" defer></script>

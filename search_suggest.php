@@ -56,7 +56,7 @@ $items = array_map(static function (array $row): array {
         'id' => (int)$row['product_id'],
         'name' => (string)$row['name'],
         'category' => (string)$row['category_name'],
-        'price' => number_format((float)$row['price'], 2),
+        'price' => format_price((float)$row['price']),
         'url' => BASE_URL . '/product.php?id=' . (int)$row['product_id'],
     ];
 }, $rows);

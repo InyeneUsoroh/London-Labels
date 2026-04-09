@@ -82,7 +82,15 @@ if (isset($_POST['ajax_update_qty'])) {
     $subtotal = 0;
     foreach ($_SESSION['cart'] ?? [] as $pid => $q) {
         $p = get_product_by_id((int)$pid);
-        if ($p) $subtotal += $p['price'] * $q;
+        if ($p) {
+            $item_price = (float)$p['price'];
+            $vid = (int)($_SESSION['cart_variant_ids'][$pid] ?? 0);
+            if ($vid > 0) {
+                $v = get_variant_by_id($vid);
+                if ($v) $item_price += (float)$v['price_modifier'];
+            }
+            $subtotal += $item_price * $q;
+        }
     }
     echo json_encode([
         'ok'       => true,
@@ -154,12 +162,19 @@ if (!empty($_SESSION['cart'])) {
                 $_SESSION['cart'][$product_id] = $qty;
             }
 
-            $line = $product['price'] * $qty;
+            $item_price = (float)$product['price'];
+            $vid = (int)($_SESSION['cart_variant_ids'][$product_id] ?? 0);
+            if ($vid > 0) {
+                $v = get_variant_by_id($vid);
+                if ($v) $item_price += (float)$v['price_modifier'];
+            }
+
+            $line = $item_price * $qty;
             $size = $_SESSION['cart_variants'][$product_id] ?? null;
             $cart_items[] = [
                 'product_id' => $product_id,
                 'name'       => $product['name'],
-                'price'      => $product['price'],
+                'price'      => $item_price,
                 'quantity'   => $qty,
                 'max_qty'    => $stock_limit,
                 'subtotal'   => $line,

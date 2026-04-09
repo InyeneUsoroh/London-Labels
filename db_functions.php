@@ -424,6 +424,16 @@ function get_product_variants(int $product_id): array {
 }
 
 /**
+ * Get a specific variant by ID
+ */
+function get_variant_by_id(int $variant_id): ?array {
+    ensure_product_extras();
+    $stmt = get_pdo()->prepare('SELECT variant_id, product_id, size_type, size, quantity, price_modifier FROM Product_Variants WHERE variant_id = ?');
+    $stmt->execute([$variant_id]);
+    return $stmt->fetch() ?: null;
+}
+
+/**
  * Validate and normalize admin-entered variants.
  * Returns [normalized_variants, errors].
  */

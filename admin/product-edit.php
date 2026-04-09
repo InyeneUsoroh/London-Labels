@@ -308,7 +308,7 @@ $setup_complete     = $setup_has_image && $setup_has_variants && $setup_has_desc
                                        placeholder="Qty" min="0" step="1"
                                        class="admin-variant-qty-input" inputmode="numeric">
                                 <input type="number" name="variant_price_mod[]"
-                                       value="<?= number_format((float)($v['price_modifier'] ?? 0), 2) ?>"
+                                       value="<?= (float)($v['price_modifier'] ?? 0) ?>"
                                        placeholder="NGN +/-" step="0.01"
                                        class="admin-variant-mod-input" inputmode="decimal"
                                        title="Price adjustment from base (e.g. +500 or -200)">
