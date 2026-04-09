@@ -92,18 +92,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'quantity'       => (int)($_POST['quantity']   ?? 0),
         ];
         if (empty($errors) && update_product_helper($product_id, $data, $errors)) {
-            $notice      = 'Product updated.';
             $product     = get_product_by_id($product_id);
-            $name        = $product['name'];
-            $sku         = $product['sku'] ?? '';
-            $description = $product['description'] ?? '';
-            $tags        = $product['tags'] ?? '';
-
-            $source_label = $product['source_label'] ?? 'London, United Kingdom';
-            $condition_label = $product['condition_label'] ?? 'New';
-            $category_id = $product['category_id'];
-            $price       = $product['price'];
-            $quantity    = $product['quantity'];
+            if ($product) {
+                $price = (float)$product['price'];
+                $notice = 'Product updated successfully. New base price: ' . format_price($price);
+            } else {
+                $notice = 'Product updated.';
+            }
+            // Update local variables from fresh DB data
+            if ($product) {
+                $name        = $product['name'];
+                $sku         = $product['sku'] ?? '';
+                $description = $product['description'] ?? '';
+                $tags        = $product['tags'] ?? '';
+                $source_label = $product['source_label'] ?? 'London, United Kingdom';
+                $condition_label = $product['condition_label'] ?? 'New';
+                $category_id = $product['category_id'];
+                $quantity    = $product['quantity'];
+            }
         }
     }
 }
