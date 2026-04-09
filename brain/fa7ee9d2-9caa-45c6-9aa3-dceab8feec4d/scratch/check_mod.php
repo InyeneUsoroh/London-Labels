@@ -1,7 +1,13 @@
 <?php
 include 'db.php';
 $pdo = get_pdo();
-$res = $pdo->query('SELECT product_id, size, price_modifier FROM Product_Variants WHERE price_modifier != 0 LIMIT 20');
-while($row = $res->fetch(PDO::FETCH_ASSOC)) {
-    echo "Product ID: " . $row['product_id'] . ", Size: " . $row['size'] . ", Modifier: " . $row['price_modifier'] . "\n";
+$product = $pdo->query("SELECT * FROM Products WHERE name LIKE '%New Balance Athletics Crop Tee%'")->fetch();
+if ($product) {
+    echo "Product ID: " . $product['product_id'] . ", Base Price: " . $product['price'] . "\n";
+    $vars = $pdo->query("SELECT * FROM Product_Variants WHERE product_id = " . $product['product_id'])->fetchAll();
+    foreach($vars as $v) {
+        echo "Size: " . $v['size'] . ", Modifier: " . $v['price_modifier'] . "\n";
+    }
+} else {
+    echo "Product not found\n";
 }

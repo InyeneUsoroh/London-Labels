@@ -42,18 +42,37 @@ if (isset($_POST['ajax_add'])) {
     }
     $product_id = (int)($_POST['product_id'] ?? 0);
     $qty        = max(1, (int)($_POST['qty'] ?? 1));
-    $product    = get_product_by_id($product_id);
+    $variant_id = (int)($_POST['variant_id'] ?? 0);
+    $size_label = trim((string)($_POST['size_label'] ?? ''));
+
+    $product = get_product_by_id($product_id);
     if (!$product) {
         echo json_encode(['ok' => false, 'error' => 'Product not found']);
         exit;
     }
+
+    $variants = get_product_variants($product_id);
+    if (!empty($variants)) {
+        if ($variant_id <= 0) {
+            echo json_encode(['ok' => false, 'error' => 'Please select a size']);
+            exit;
+        }
+        $_SESSION['cart_variant_ids'][$product_id] = $variant_id;
+        if ($size_label !== '') {
+            $_SESSION['cart_variants'][$product_id] = $size_label;
+        }
+    } else {
+        unset($_SESSION['cart_variant_ids'][$product_id]);
+        unset($_SESSION['cart_variants'][$product_id]);
+    }
+
     $existing = (int)($_SESSION['cart'][$product_id] ?? 0);
     $limit = get_cart_product_stock_limit($product_id);
     $_SESSION['cart'][$product_id] = min($existing + $qty, $limit);
-    
+
     echo json_encode([
         'ok'      => true,
-        'message' => e($product['name']) . ' added to cart',
+        'message' => e($product['name']) . ($size_label ? " (" . e($size_label) . ")" : "") . ' added to cart',
         'count'   => array_sum($_SESSION['cart'] ?? []),
     ]);
     exit;

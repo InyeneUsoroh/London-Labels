@@ -52,6 +52,7 @@ if ($product_id <= 0) {
     if (!$product) {
         $errors[] = 'Product not found.';
     } else {
+        $main_product = $product;
         $page_title = $product['name'];
         $product_images_raw = get_product_images($product_id);
         $product_images = [];
@@ -1094,8 +1095,11 @@ if (!empty($product)): ?>
                 <?php endif; ?>
             </div>
             <div class="product-grid related-products-grid">
-                <?php foreach ($related_products as $product): ?>
-                    <?php include __DIR__ . '/includes/product-card.php'; ?>
+                <?php foreach ($related_products as $rp): ?>
+                    <?php 
+                        $product = $rp; // Temporarily set $product for the card template
+                        include __DIR__ . '/includes/product-card.php'; 
+                    ?>
                 <?php endforeach; ?>
             </div>
         </section>
@@ -1334,7 +1338,7 @@ if (!empty($product)): ?>
         }
 
         var priceDisplay = document.getElementById('product-base-price');
-        var basePrice = parseFloat("<?= (float)$product['price'] ?>");
+        var basePrice = parseFloat("<?= (float)$main_product['price'] ?>");
 
         function applySizeSelection(btn) {
             sizeBtns.forEach(function (b) { b.classList.remove('selected'); });
