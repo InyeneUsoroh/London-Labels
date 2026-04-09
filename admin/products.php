@@ -104,9 +104,11 @@ include __DIR__ . '/inc_admin_layout.php';
                             </span>
                         </td>
                         <td><?= date('M d, Y', strtotime($product['added_at'])) ?></td>
-                        <td>
-                            <a href="<?= BASE_URL ?>/admin/product-edit.php?id=<?= $product['product_id'] ?>" class="btn admin-mini-btn admin-mini-btn-gap">Edit</a>
-                            <a href="<?= BASE_URL ?>/admin/product-delete.php?id=<?= $product['product_id'] ?>" class="btn danger admin-mini-btn">Delete</a>
+                        <td style="white-space: nowrap;">
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <a href="<?= BASE_URL ?>/admin/product-edit.php?id=<?= $product['product_id'] ?>" class="btn admin-mini-btn">Edit</a>
+                                <a href="<?= BASE_URL ?>/admin/product-delete.php?id=<?= $product['product_id'] ?>" class="btn danger admin-mini-btn">Delete</a>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>
