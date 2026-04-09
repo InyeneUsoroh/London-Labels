@@ -262,12 +262,10 @@ include __DIR__ . '/inc_header.php';
                                 <?= format_price($item['subtotal']) ?>
                             </div>
                             <div class="cart-item-remove">
-                                <form method="post" style="margin:0">
-                                    <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
-                                    <input type="hidden" name="action" value="remove">
-                                    <input type="hidden" name="product_id" value="<?= $item['product_id'] ?>">
-                                    <button type="submit" class="cart-remove-btn" aria-label="Remove <?= e($item['name']) ?> from cart">Remove</button>
-                                </form>
+                                <button type="button" class="cart-remove-btn"
+                                    data-product-id="<?= $item['product_id'] ?>"
+                                    data-csrf="<?= csrf_token() ?>"
+                                    aria-label="Remove <?= e($item['name']) ?> from cart">Remove</button>
                             </div>
                         </div>
                     <?php endforeach; ?>
