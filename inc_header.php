@@ -57,6 +57,11 @@ $upload_script_version = is_file($upload_script_path) ? (string)filemtime($uploa
     <meta name="twitter:description" content="<?= e($meta_description_content) ?>">
     <meta name="twitter:image" content="<?= e(BASE_URL) ?>/assets/images/og-image.jpg">
     <meta name="twitter:image:alt" content="London Labels — Style Without Borders">
+    
+    <!-- Typography: Preconnect for faster font delivery -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <title><?= $meta_title_content ?></title>
 

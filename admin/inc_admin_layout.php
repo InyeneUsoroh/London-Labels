@@ -28,11 +28,15 @@ $_meta_title = isset($page_title) ? htmlspecialchars($page_title, ENT_QUOTES) . 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex,nofollow">
     <title><?= $_meta_title ?></title>
+    
+    <!-- Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="icon" type="image/svg+xml" href="<?= BASE_URL ?>/assets/images/favicon.svg">
-    <link rel="preload" href="<?= BASE_URL ?>/assets/style.css?v=<?= filemtime(__DIR__ . '/../assets/style.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="<?= BASE_URL ?>/assets/style.css?v=<?= filemtime(__DIR__ . '/../assets/style.css') ?>"></noscript>
-    <link rel="preload" href="<?= BASE_URL ?>/assets/admin.css?v=<?= filemtime(__DIR__ . '/../assets/admin.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="<?= BASE_URL ?>/assets/admin.css?v=<?= filemtime(__DIR__ . '/../assets/admin.css') ?>"></noscript>
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/style.css?v=<?= filemtime(__DIR__ . '/../assets/style.css') ?>">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/admin.css?v=<?= filemtime(__DIR__ . '/../assets/admin.css') ?>">
     <script>window.BASE_URL = '<?= BASE_URL ?>';</script>
 </head>
 <body class="admin-body">
