@@ -1,4 +1,4 @@
-﻿/* ===== TYPOGRAPHY SYSTEM - POPPINS + PLAYFAIR DISPLAY ===== */
+/* ===== TYPOGRAPHY SYSTEM - POPPINS + PLAYFAIR DISPLAY ===== */
 /* Poppins: body, nav, UI - Playfair Display: hero headings, editorial accents */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
@@ -1072,6 +1072,25 @@ input:focus-visible:not(.nav-search-form input):not(.mob-search-bar input) {
 .categories-grid {
     display: flex;
     flex-direction: column;
+    min-height: 120px;
+}
+
+.categories-skeleton {
+    padding: 4px 20px 12px;
+    gap: 12px;
+}
+
+.skeleton-link {
+    height: 14px;
+    background: linear-gradient(90deg, #f3f4f6 25%, #f9fafb 50%, #f3f4f6 75%);
+    background-size: 200% 100%;
+    animation: skeleton-blink 1.5s infinite linear;
+    border-radius: 4px;
+}
+
+@keyframes skeleton-blink {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 
 .category-item {

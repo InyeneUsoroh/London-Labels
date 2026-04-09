@@ -226,7 +226,12 @@ $upload_script_version = is_file($upload_script_path) ? (string)filemtime($uploa
                     </button>
                     <div class="hamburger-menu-panel" id="categoriesMenu" role="menu" aria-label="Product categories">
                         <div class="hamburger-menu-header">Shop by Category</div>
-                        <!-- Categories will be loaded dynamically -->
+                        <div class="categories-grid categories-skeleton">
+                            <div class="skeleton-link" style="width: 60%"></div>
+                            <div class="skeleton-link" style="width: 45%"></div>
+                            <div class="skeleton-link" style="width: 55%"></div>
+                            <div class="skeleton-link" style="width: 40%"></div>
+                        </div>
                         <div class="hamburger-menu-footer">
                             <a href="<?= BASE_URL ?>/shop.php">View All Products</a>
                         </div>

@@ -160,6 +160,10 @@ class HamburgerMenu {
 
     init() {
         if (!this.toggle || !this.panel) return;
+
+        // Start loading categories immediately on boot to prevent 'collapsed' layout on first hover
+        this.loadCategories();
+
         if (window.innerWidth > 768) {
             this.toggle.parentElement.addEventListener('mouseenter', this.handleMouseEnter.bind(this));
             this.toggle.parentElement.addEventListener('mouseleave', this.handleMouseLeave.bind(this));
