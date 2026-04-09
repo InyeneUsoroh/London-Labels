@@ -43,7 +43,7 @@ $_meta_title = isset($page_title) ? htmlspecialchars($page_title, ENT_QUOTES) . 
     <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
         <div class="admin-sidebar-brand">
             <a href="<?= BASE_URL ?>/admin/dashboard.php" class="admin-brand-link">
-                <span class="admin-brand-name">London Labels</span>
+                <span class="admin-brand-name"><?= SITE_NAME ?></span>
                 <span class="admin-brand-tag">Admin</span>
             </a>
         </div>
