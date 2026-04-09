@@ -97,21 +97,26 @@ if (isset($_POST['ajax_update_qty'])) {
         $applied_qty = min($qty, $limit);
         $_SESSION['cart'][$product_id] = $applied_qty;
     }
-    // Recalculate subtotal
+    // Recalculate line subtotal for the modified product
+    $line_total = 0;
+    $p_mod = get_product_by_id($product_id);
+    if ($p_mod) $line_total = (float)$p_mod['price'] * $applied_qty;
+
+    // Recalculate global subtotal
     $subtotal = 0;
     foreach ($_SESSION['cart'] ?? [] as $pid => $q) {
         $p = get_product_by_id((int)$pid);
         if ($p) {
             $item_price = (float)$p['price'];
-            // Skip variant modifiers to maintain unified pricing standards
             $subtotal += $item_price * $q;
         }
     }
     echo json_encode([
-        'ok'       => true,
-        'subtotal' => format_price($subtotal),
-        'qty'      => $applied_qty,
-        'count'    => array_sum($_SESSION['cart'] ?? []),
+        'ok'            => true,
+        'subtotal'      => format_price($subtotal),
+        'line_subtotal' => format_price($line_total),
+        'qty'           => $applied_qty,
+        'count'         => array_sum($_SESSION['cart'] ?? []),
     ]);
     exit;
 }

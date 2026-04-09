@@ -620,8 +620,17 @@ function initCartActions() {
                     if (data.ok) {
                         const subtotalEl = document.getElementById('cart-subtotal-val');
                         const totalEl    = document.getElementById('cart-total-val');
+                        const lineEl     = document.querySelector('[data-item-subtotal="' + productId + '"]');
+
                         if (subtotalEl) subtotalEl.textContent = data.subtotal;
                         if (totalEl)    totalEl.textContent    = data.subtotal;
+                        if (lineEl) {
+                            lineEl.textContent = data.line_subtotal;
+                            lineEl.animate([
+                                { opacity: 0.4 },
+                                { opacity: 1 }
+                            ], { duration: 300 });
+                        }
                         updateHeaderCartBadge(data.count);
                     }
                 } catch (e) {
