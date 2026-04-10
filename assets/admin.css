@@ -1,4 +1,4 @@
-﻿/* ===== LONDON LABELS â€” ADMIN CSS ===== */
+/* ===== LONDON LABELS â€” ADMIN CSS ===== */
 /* Loaded only on admin pages. Builds on top of style.css variables. */
 
 /* ===== RESET / BASE ===== */
@@ -2312,6 +2312,15 @@
     flex-direction: column;
     gap: 8px;
 }
+
+.admin-quick-links .btn {
+    width: 100%;
+}
+
+.admin-quick-links .btn .admin-nav-badge {
+    margin-left: 0;
+}
+
 
 .admin-stat-sub-danger {
     color: #dc2626;

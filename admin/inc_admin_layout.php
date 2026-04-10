@@ -65,7 +65,7 @@ $_meta_title = isset($page_title) ? htmlspecialchars($page_title, ENT_QUOTES) . 
                 Products
             </a>
             <a href="<?= BASE_URL ?>/admin/homepage-curation.php" class="admin-nav-link <?= _admin_active('homepage-curation.php') ?>">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M8 12.5h8"/><path d="M8 15.5h8"/><path d="M8 18.5h5"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 Homepage Curation
             </a>
             <a href="<?= BASE_URL ?>/admin/categories.php" class="admin-nav-link <?= _admin_active('categories.php') ?>">
