@@ -168,7 +168,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errors)) {
             ]);
             $response = curl_exec($ch);
             $curl_err = curl_error($ch);
-            curl_close($ch);
 
             if ($curl_err) {
                 $errors[] = 'Could not connect to payment provider. Please try again.';
