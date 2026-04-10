@@ -4,6 +4,10 @@
  * Standalone layout for all admin pages. Does NOT use the public header/footer.
  * Include at the top of every admin page AFTER setting $page_title and calling require_admin().
  */
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 if (!defined('BASE_URL')) require_once __DIR__ . '/../functions.php';
 
 $_admin_user     = get_user_by_id((int) current_user_id());
