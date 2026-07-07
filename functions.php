@@ -216,8 +216,18 @@ function sanitize_local_upload_media_url(?string $url): ?string {
     }
 
     $path = str_replace('\\', '/', (string)($parts['path'] ?? ''));
-    if (stripos($path, '/Uploads/') === false) {
+    $uploadsPos = stripos($path, '/Uploads/');
+    if ($uploadsPos === false) {
         return null;
+    }
+
+    // Check if the local file exists on disk
+    $relative = ltrim(substr($path, $uploadsPos + 9), '/');
+    if ($relative !== '') {
+        $local_file = rtrim(UPLOAD_DIR, '/\\') . '/' . str_replace('\\', '/', $relative);
+        if (!file_exists($local_file)) {
+            return null;
+        }
     }
 
     return $url;
