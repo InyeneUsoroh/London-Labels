@@ -2942,3 +2942,64 @@
 .admin-search-input-wide {
     min-width: 280px;
 }
+
+/* ===== NEW STYLES FROM AUDIT ===== */
+.admin-low-stock-qty.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+@media (max-width: 768px) {
+    /* Responsive Table to Cards Transformation */
+    .admin-table-responsive table, 
+    .admin-table-responsive thead, 
+    .admin-table-responsive tbody, 
+    .admin-table-responsive th, 
+    .admin-table-responsive td, 
+    .admin-table-responsive tr { 
+        display: block; 
+    }
+    
+    .admin-table-responsive thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    .admin-table-responsive tr { 
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        padding: 12px;
+        background: #fff;
+    }
+    
+    .admin-table-responsive td { 
+        border: none;
+        border-bottom: 1px solid #f3f4f6;
+        position: relative;
+        padding-left: 45% !important; 
+        text-align: right;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+    }
+    
+    .admin-table-responsive td:last-child {
+        border-bottom: none;
+    }
+    
+    .admin-table-responsive td:before { 
+        position: absolute;
+        top: 8px;
+        left: 12px;
+        width: 40%; 
+        padding-right: 10px; 
+        white-space: nowrap;
+        text-align: left;
+        font-weight: 600;
+        font-size: 11px;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        content: attr(data-label);
+    }
+}
