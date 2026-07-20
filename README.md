@@ -14,8 +14,9 @@ London Labels is a production-ready online fashion store for a Lagos-based retai
 
 ## 📸 Screenshots
 
-> *(<img width="958" height="410" alt="Screenshot 2026-07-20 160900" src="https://github.com/user-attachments/assets/2c7aec5c-339c-4a8c-b738-0774229c1312" />
-)*
+> *<img width="958" height="410" alt="Screenshot 2026-07-20 160900" src="https://github.com/user-attachments/assets/2c7aec5c-339c-4a8c-b738-0774229c1312" />
+<img width="959" height="412" alt="Screenshot 2026-07-20 160938" src="https://github.com/user-attachments/assets/6e0b64fc-4731-468c-aa95-ed93c8792c14" />
+*
 
 ---
 
