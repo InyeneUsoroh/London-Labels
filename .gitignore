@@ -8,3 +8,5 @@
 /Uploads/categories/*
 !/Uploads/categories/.htaccess
 !/Uploads/categories/index.php
+
+config.php
