@@ -149,6 +149,15 @@ All secrets are injected at runtime via environment variables on Railway — nev
 
 ---
 
+## 🎓 Academic Context
+
+This project was developed as a **third-level academic placement project substitute**. Unable to secure an industry placement, the requirement was fulfilled by independently designing, building, and deploying a fully functional web application from scratch.
+
+The project demonstrates the practical application of full-stack web development skills acquired throughout the programme — covering database design, server-side programming, client-side interactivity, authentication, payment integration, and cloud deployment — all without the use of application frameworks.
+
+---
+
 ## 📄 License
 
-This project is for portfolio demonstration purposes.
+This project is open for viewing and portfolio purposes. Please do not redistribute or repurpose without permission.
+
